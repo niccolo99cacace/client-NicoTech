@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useContext, useEffect} from 'react';
 import {
   Grid,
   List,
@@ -11,10 +11,13 @@ import {
   useMediaQuery,
   useTheme
 } from '@material-ui/core';
+import UserContext from "../contexts/UserContext";
 import {Paper , Container, Box } from '@mui/material';
 import { Add, Remove } from '@material-ui/icons';
 import Image from 'material-ui-image';
 import "./ShoppingCart.css";
+import { getCartByUserId } from '../api/cart';
+import { getItemById } from '../api/items';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,40 +42,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const defaultItems = [
-  {
-    id: 1,
-    name: 'Item 1',
-    brand: 'Brand 1',
-    price: 10.99,
-    quantity: 1,
-    image: 'https://res.cloudinary.com/deze9bms8/image/upload/v1673906443/samples/ecommerce/shoes.png'
-  },
-  {
-    id: 2,
-    name: 'Item 2',
-    brand: 'Brand 2',
-    price: 20.99,
-    quantity: 2,
-    image: 'https://via.placeholder.com/150x150'
-  },
-  {
-  id: 3,
-  name: 'Item 3',
-  brand: 'Brand 3',
-  price: 30.99,
-  quantity: 1,
-  image: 'https://via.placeholder.com/150x150'
-  },
-  ];
-  
-  function ShoppingCart({ items = defaultItems, onDelete, onCheckout }) {
+
+  function ShoppingCart({  onDelete, onCheckout }) {
+
+  const {userId} = useContext(UserContext);
 
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [cartItems, setCartItems] = useState(items);
+  const [cartItems, setCartItems] = useState([]);
   
+  useEffect(() => {
+
+    const cartItemsFetch = async () => {
+
+      const items=[];
+
+    const res = await getCartByUserId(userId);
+    res.map((item) => (
+      items.push(getItemById(item.item.id))
+      ));
+      console.log(items);
+      setCartItems(() => {
+        return [...items];
+      });
+    
+    }
+
+    cartItemsFetch();
+  }, []);
+
   const handleDelete = (itemId) => {
   setCartItems(cartItems.filter(item => item.id !== itemId));
   onDelete(itemId);

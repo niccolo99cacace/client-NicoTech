@@ -1,6 +1,6 @@
 import { signInUser } from "../api/auth";
 import Button from "@mui/material/Button";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
@@ -8,9 +8,12 @@ import {Paper , Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-
+import UserContext from "../contexts/UserContext";
 
 function Login() {
+
+
+  const {updateUserId} = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -24,8 +27,8 @@ function Login() {
     event.preventDefault();
 
     const res = await signInUser(formData);
-console.log(res);
-if(res.hasOwnProperty("user") == true ){console.log("ok"); navigate("/", {
+  
+if(res.hasOwnProperty("user") == true ){ updateUserId(res.user.id); navigate("/", {
   //replace:true non permette all'utente di tornare indietro(col tasto del browser) al login una volta acceduto
   replace: true,
 });;}
@@ -52,8 +55,7 @@ if(res.hasOwnProperty("error") == true ) {setError(res.error); console.log("nooo
 
     <Box
         
-     sx={{
-      bgcolor: '#FAE2C6',
+     sx={{ 
       display: "inline-flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -98,12 +100,12 @@ name="password"
           onChange={handleChange}
         />
  {error && <FormHelperText error>{error}</FormHelperText>}
-<Button type="submit"  variant="contained" sx={{mr:"4"}}>Login</Button> 
+<Button type="submit"  variant="contained" sx={{mr:"4"}} style={{ backgroundColor: "black" }}>Login</Button> 
 </Paper>
 </FormControl>
     </form>
 
-<Link to="/registration" style={{marginTop: '20px'}}>I’m not registered yet</Link>
+<Link to="/registration" style={{marginTop: '20px'}} >I’m not registered yet</Link>
 </Box>
 
 </React.Fragment>

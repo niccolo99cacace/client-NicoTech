@@ -14,15 +14,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageCarousel from "../components/ImageCarousel";
 import Counter from "../components/Counter";
 import {getItemById} from "../api/items";
+import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
+    marginTop:'25px',
   },
   imageSlider: {
     width: '100%',
@@ -79,8 +76,8 @@ export default function ProductComponent() {
 
 
   return (
+    <Container>
     <div className={classes.root}>
-    <Paper className={classes.paper}>
       <Grid container>
         <Grid item xs={12} sm={6}>
             <ImageCarousel/>
@@ -150,7 +147,7 @@ probare, quae sunt a te dicta? Refert tamen, quo modo.
 </ExpansionPanel>
 </Grid>
 </Grid>
-</Paper>
 </div>
+</Container>
 );
 }

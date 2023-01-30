@@ -31,13 +31,14 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
   customButton: {
-    backgroundColor: '#FAE2C6',
+    backgroundColor: '#f5f5f5',
     color: 'black'
   },
 });
 
 
 function CardList() {
+  
 
   const classes = useStyles();
 
@@ -83,7 +84,7 @@ function CardList() {
             Availability: {item.availability}
             </Typography>
             </Box>
-            <Button className={classes.customButton} size="small" href={item._id} >
+            <Button className={classes.customButton} size="small" href={'/item/' + item._id} >
             view product
         </Button>
           </Grid>  
