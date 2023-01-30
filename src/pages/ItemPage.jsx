@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -11,7 +11,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ImageSlider from "../components/ImageSlider";
+import ImageCarousel from "../components/ImageCarousel";
 import Counter from "../components/Counter";
 import {getItemById} from "../api/items";
 
@@ -83,7 +83,7 @@ export default function ProductComponent() {
     <Paper className={classes.paper}>
       <Grid container>
         <Grid item xs={12} sm={6}>
-            <ImageSlider/>
+            <ImageCarousel/>
         </Grid>
         <Grid item xs={12} sm={6}>
           
