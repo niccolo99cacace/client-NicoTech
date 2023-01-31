@@ -1,6 +1,6 @@
 import { signInUser } from "../api/auth";
 import Button from "@mui/material/Button";
-import React, { useState, useContext } from "react";
+import React, { useState} from "react";
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
@@ -8,12 +8,12 @@ import {Paper , Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import UserContext from "../contexts/UserContext";
+
 
 function Login() {
 
 
-  const {updateUserId} = useContext(UserContext);
+
 
   const navigate = useNavigate();
 
@@ -28,11 +28,11 @@ function Login() {
 
     const res = await signInUser(formData);
   
-if(res.hasOwnProperty("user") == true ){ updateUserId(res.user.id); navigate("/", {
+if(res.hasOwnProperty("user") == true ){ console.log("ok");navigate("/", {
   //replace:true non permette all'utente di tornare indietro(col tasto del browser) al login una volta acceduto
   replace: true,
 });;}
-if(res.hasOwnProperty("error") == true ) {setError(res.error); console.log("nooooooooooooo");}
+if(res.hasOwnProperty("error") == true ) {setError(res.error); console.log("nooooooooooooo");} 
   
   };
 
