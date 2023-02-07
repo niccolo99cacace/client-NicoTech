@@ -16,8 +16,8 @@ import {Paper , Container, Box } from '@mui/material';
 import { Add, Remove } from '@material-ui/icons';
 import Image from 'material-ui-image';
 import "./ShoppingCart.css";
-import { getCartByUserId } from '../api/cart';
-import { getItemById } from '../api/items';
+import { getCartItemsByUser } from '../api/cart';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,25 +52,21 @@ const useStyles = makeStyles((theme) => ({
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [cartItems, setCartItems] = useState([]);
   
-  useEffect(() => {
+   useEffect(() => {
 
     const cartItemsFetch = async () => {
 
-      const items=[];
+      
 
-    const res = await getCartByUserId(userId);
-    res.map((item) => (
-      items.push(getItemById(item.item.id))
-      ));
-      console.log(items);
+    const res = await getCartItemsByUser();
       setCartItems(() => {
-        return [...items];
-      });
+        return [...res];
+      }); 
     
     }
 
     cartItemsFetch();
-  }, []);
+  }, []);  
 
   const handleDelete = (itemId) => {
   setCartItems(cartItems.filter(item => item.id !== itemId));
@@ -99,20 +95,20 @@ const useStyles = makeStyles((theme) => ({
   <List>
   {cartItems.map((item) => (
     <Paper elevation={3} sx={{height:"100%", weight:"100%", mt:"10px",mx:"10px"}}>
-  <ListItem key={item.id}>
+  <ListItem key={item._id}>
   <Grid container className={classes.gridContainer}>
   <Grid item xs={6} sm={7} md={3} className={classes.gridItem}>
-  <img src={item.image}  className="item-image" alt={item.name}/>
+  <img src={item.itemId.imageUrl}  className="item-image" alt={item.name}/>
 </Grid>
 <Grid item xs={6} sm={5} md={9} className={classes.gridItem}>
 <Box sx={{display:"flex"}}>
 <ListItemText
-primary={item.name}
-secondary={item.brand}
+primary={item.itemId.name}
+secondary={item.itemId.brand}
 />
 <ListItemText
-primary=<p>Price: {item.price}$</p>
-secondary=<p>Quantity: {item.quantity}</p>
+primary=<p>Price: {item.itemId.price}$</p>
+secondary=<p>Quantity: {item.itemQuantity}</p>
 />
 </Box>
 

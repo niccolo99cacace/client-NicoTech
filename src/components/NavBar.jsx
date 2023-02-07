@@ -67,6 +67,8 @@ export default function NavBar() {
   const navigate = useNavigate();
   const onLogin = () =>  { navigate("/login"); }
 
+  const onCart = () =>  { navigate("/Cart"); }
+
   
 
   return (
@@ -91,7 +93,7 @@ export default function NavBar() {
           <IconButton color="inherit" onClick={onLogin}>
             <AccountCircle />
           </IconButton>
-          <IconButton color="inherit" >
+          <IconButton color="inherit" onClick={onCart} >
   <ShoppingCartIcon />
 </IconButton>
         </Toolbar>
