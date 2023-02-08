@@ -12,9 +12,18 @@ const useStyles = makeStyles({
     height: '100%',
     width: '100%',
   },
+  imageContainer: {
+    height: '300px',
+    width: '500px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
   image: {
-    height: '80%',
-    width: 'auto',
+    objectFit: 'contain',
+    height: '100%',
+    width: '100%',
   },
   counter: {
     display: 'flex',
@@ -25,22 +34,18 @@ const useStyles = makeStyles({
   },
 });
 
-const ImageCarousel = () => {
+const ImageCarousel = (props) => {
 
 
-    const image1 = '../Images/autunno.jpg';
-const image2 = '../Images/estate.jpg'; 
-const image3 = '../Images/inverno.jpg';
-const images = [image1, image2, image3];
   const classes = useStyles();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
-    setCurrentIndex(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
+    setCurrentIndex(currentIndex === props.images.length - 1 ? 0 : currentIndex + 1);
   };
 
   const handlePrev = () => {
-    setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
+    setCurrentIndex(currentIndex === 0 ? props.images.length  - 1 : currentIndex - 1);
   };
 
   return (
@@ -49,14 +54,16 @@ const images = [image1, image2, image3];
       <IconButton onClick={handlePrev}>
         <ChevronLeftIcon />
       </IconButton>
-      <img src={images[currentIndex]} className={classes.image} alt="slider-image" />
+      <div className={classes.imageContainer}>
+      <img src={props.images[currentIndex]} className={classes.image} alt="slider-image" />
+      </div>
       <IconButton onClick={handleNext}>
         <ChevronRightIcon />
       </IconButton>
       
     </div>
     <div className={classes.counter}>
-        {currentIndex + 1}/{images.length}
+        {currentIndex + 1}/{props.images.length}
       </div>
       </div>
   );

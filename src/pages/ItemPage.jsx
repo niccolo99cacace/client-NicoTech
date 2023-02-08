@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -27,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   productDetails: {
     textAlign: 'left',
   },
-  favoriteButton: {
-    color: '#ff9800',
+  panels: {
+    marginTop:'25px',
   },
   addToCartButton: {
     backgroundColor: '#ff9800',
@@ -36,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: '#ffc107',
     },
+    marginTop:'15px',
+    marginBottom:'15px',
+    marginLeft:'20px',
   },
 }));
 
@@ -44,15 +46,15 @@ export default function ProductComponent() {
   const [item,setItem] = React.useState({name: "",
   brand: "",
   description: "an amazing white sweatshirt",
+  largeDescription: "an amazing white sweatshirt",
   category: "sweatshirt",
   price: 200,
-  availability: 8});
-  const [favorited, setFavorited] = React.useState(false);
+  availability: 8,
+imageUrl:["gg"]});
+
+
   const [expanded, setExpanded] = React.useState('reviews');
 
-  const toggleFavorite = () => {
-    setFavorited(!favorited);
-  };
 
   const handleExpand = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -80,26 +82,28 @@ export default function ProductComponent() {
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={12} sm={6}>
-            <ImageCarousel/>
+            <ImageCarousel images={item.imageUrl}/>
         </Grid>
         <Grid item xs={12} sm={6}>
           
             <div className={classes.productDetails}>
               <Typography variant="h5">{item.name} </Typography>
               <Typography variant="subtitle1">{item.brand}</Typography>
-              <Typography variant="body1">Description : {item.description}</Typography>
+              
               <Typography variant="subtitle1">Price : {item.price} $</Typography>
 <Typography variant="subtitle1">Availability : {item.availability}</Typography>
-<IconButton onClick={{toggleFavorite}}>
-{favorited ? <FavoriteIcon className={classes.favoriteButton} /> : <StarIcon />}
-</IconButton>
-<Button className={classes.addToCartButton}>Add to Cart</Button>
 <Counter/>
+<Button className={classes.addToCartButton}>Add to Cart</Button>
+
+<Typography variant="body1">Description : {item.description}</Typography>
 </div>
 
 
+</Grid>
+</Grid>
 
 
+<div className={classes.panels}>
 <ExpansionPanel expanded={expanded === 'reviews'} onChange={handleExpand('reviews')}>
 <ExpansionPanelSummary
 expandIcon={<ExpandMoreIcon />}
@@ -140,13 +144,11 @@ id="info-header"
 </ExpansionPanelSummary>
 <ExpansionPanelDetails>
 <Typography>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-probare, quae sunt a te dicta? Refert tamen, quo modo.
+{item.largeDescription}
 </Typography>
 </ExpansionPanelDetails>
 </ExpansionPanel>
-</Grid>
-</Grid>
+</div>
 </div>
 </Container>
 );

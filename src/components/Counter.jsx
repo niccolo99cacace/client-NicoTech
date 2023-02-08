@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     width: '100%',
     height: 'auto',
+    marginLeft:'20px',
   },
   count: {
     width: '100px',
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     height: '30px',
     margin: theme.spacing(1),
     fontWeight: 'bold',
-    color: theme.palette.primary.main,
+    color: "#0046be",
     borderRadius: '5px'
   },
 }));

@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     display: "none",
+    color: "white",
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
@@ -41,13 +42,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   inputRoot: {
-    color: "inherit",
+    color: "white",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
+    color: "white",
     [theme.breakpoints.up("sm")]: {
       width: "12ch",
       "&:focus": {
@@ -57,8 +59,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar() {
 
+
+
+
+
+export default function NavBar() {
 
 
   const classes = useStyles();
@@ -73,7 +79,8 @@ export default function NavBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+    
+      <AppBar position="static" style={{ backgroundColor:"#0046be" }}>     
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
             Nico Style

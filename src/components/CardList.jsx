@@ -11,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Image from 'material-ui-image';
 import "./CardList.css";
+import LateralMenu from './LateralMenu';
 
 
 
@@ -58,24 +59,29 @@ function CardList() {
 
 
   return (
+    <React.Fragment>
     <Grid container spacing={2} style={{ marginTop: '10px' }}>
+  <Grid item xs={12} sm={3} md={3} lg={3}>
+    <LateralMenu />
+  </Grid>
+  <Grid item xs={12} sm={9} md={9} lg={9}>
+    <Grid container spacing={2}>
       {itemss.map((item) => (
-        <Grid item xs={12} sm={6} md={3} lg={3} key={item._id} >
-        <Card className={classes.root}>
+        <Grid item xs={12} sm={6} md={3} lg={3} key={item._id}>
+          <Card className={classes.root}>
       <CardContent>
-        <Grid container spacing={2} >
-          <Grid item xs={12}>
+        
             <Typography variant="h5" component="h2">
               {item.name}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
               {item.category} - {item.brand}
             </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Image className="fit-image" src={item.imageUrl}  disableSpinner={true}  />
-          </Grid>
-          <Grid item xs={12} container justifyContent="space-between">
+          
+          
+            <Image className="fit-image" src={item.imageUrl[0]}  disableSpinner={true}  />
+          
+         
           <Box>
             <Typography variant="h6" component="h2">
               Price: {item.price}€
@@ -87,13 +93,16 @@ function CardList() {
             <Button className={classes.customButton} size="small" href={'/item/' + item._id} >
             view product
         </Button>
-          </Grid>  
-        </Grid>
+          
+      
       </CardContent>
     </Card>
 </Grid>
 ))}
 </Grid>
+</Grid>
+</Grid>
+</React.Fragment>
 );
 }
 
