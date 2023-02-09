@@ -90,9 +90,11 @@ function CardList() {
             Availability: {item.availability}
             </Typography>
             </Box>
-            <Button className={classes.customButton} size="small" href={'/item/' + item._id} >
+            <Box style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button className={classes.customButton} size="small" href={'/item/' + item._id} style={{ backgroundColor:"#0046be",color:"white"}}>
             view product
         </Button>
+        </Box>
           
       
       </CardContent>
@@ -102,6 +104,7 @@ function CardList() {
 </Grid>
 </Grid>
 </Grid>
+
 </React.Fragment>
 );
 }

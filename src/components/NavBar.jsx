@@ -9,6 +9,8 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import {Box } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
+      marginLeft: 50,
     },
+
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -57,7 +59,18 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-}));
+
+
+  logo: {
+    flexGrow: 1,
+    display: "none",
+    height: '50px',
+    [theme.breakpoints.up("sm")]: {
+      display: "block",
+      height: '70px'},
+    }
+}
+));
 
 
 
@@ -82,9 +95,9 @@ export default function NavBar() {
     
       <AppBar position="static" style={{ backgroundColor:"#0046be" }}>     
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Nico Style
-          </Typography>
+        <Link to="/">
+      <img src="https://res.cloudinary.com/deze9bms8/image/upload/v1675944061/NicoTechBlu_nlgepy.png" alt="Logo" className={classes.logo} />
+    </Link>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -103,6 +116,7 @@ export default function NavBar() {
           <IconButton color="inherit" onClick={onCart} >
   <ShoppingCartIcon />
 </IconButton>
+
         </Toolbar>
       </AppBar>
     </div>
