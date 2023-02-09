@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import StarIcon from '@material-ui/icons/Star';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import IconButton from '@material-ui/core/IconButton';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageCarousel from "../components/ImageCarousel";
-import Counter from "../components/Counter";
 import {getItemById} from "../api/items";
 import Container from '@material-ui/core/Container';
+import {addItemToCart} from '../api/cart';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,18 +36,49 @@ const useStyles = makeStyles((theme) => ({
     marginBottom:'15px',
     marginLeft:'20px',
   },
+
+  counter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: 'auto',
+    marginLeft:'20px',
+  },
+  count: {
+    width: '100px',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: `1px solid ${theme.palette.primary.main}`,
+    margin: theme.spacing(1),
+    fontWeight: 'bold',
+    color: theme.palette.primary.main,
+    borderRadius: '5px'
+  },
+  counterButton: {
+    minWidth: '30px',
+    height: '30px',
+    margin: theme.spacing(1),
+    fontWeight: 'bold',
+    color: "#0046be",
+    borderRadius: '5px'
+  },
 }));
 
 export default function ProductComponent() {
   const classes = useStyles();
   const [item,setItem] = React.useState({name: "",
   brand: "",
-  description: "an amazing white sweatshirt",
-  largeDescription: "an amazing white sweatshirt",
-  category: "sweatshirt",
-  price: 200,
-  availability: 8,
+  description: "",
+  largeDescription: "",
+  category: "",
+  price: 0,
+  availability: 1,
 imageUrl:["gg"]});
+
+
 
 
   const [expanded, setExpanded] = React.useState('reviews');
@@ -76,13 +104,32 @@ imageUrl:["gg"]});
   }, []);
 
 
+  const [count, setCount] = useState(1);
+
+  const handleIncrement = (max) => {
+    if (count < max) {
+      setCount(count + 1);
+    }
+    };
+    
+    const handleDecrement = () => {
+    if (count > 1) {
+    setCount(count - 1);
+    }
+    };
+
+
+    const handleAddCart = async (itemId,itemQuantity) => {
+      addItemToCart({"itemId":itemId, "itemQuantity":itemQuantity});
+      console.log({"itemId":itemId, "itemQuantity":itemQuantity});
+      };
 
   return (
     <Container>
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={12} sm={6}>
-            <ImageCarousel images={item.imageUrl}/>
+            <ImageCarousel images={item.imageUrl} />
         </Grid>
         <Grid item xs={12} sm={6}>
           
@@ -92,8 +139,15 @@ imageUrl:["gg"]});
               
               <Typography variant="subtitle1">Price : {item.price} $</Typography>
 <Typography variant="subtitle1">Availability : {item.availability}</Typography>
-<Counter/>
-<Button className={classes.addToCartButton}>Add to Cart</Button>
+
+
+<div className={classes.counter}>
+    <Button className={classes.Counterbutton} onClick={handleDecrement}>-</Button>
+    <Typography className={classes.count} variant='h5'>{count}</Typography>
+    <Button className={classes.button} onClick={() => handleIncrement(item.availability)}>+</Button>
+    </div>
+
+<Button className={classes.addToCartButton} onClick={() => handleAddCart(item._id,count)}>Add to Cart</Button>
 
 <Typography variant="body1">Description : {item.description}</Typography>
 </div>

@@ -1,77 +1,97 @@
-import React, { useState ,useContext, useEffect} from 'react';
+import React, { useState , useEffect} from 'react';
+import Typography from "@material-ui/core/Typography";
 import {
   Grid,
   List,
   ListItem,
   ListItemText,
-  ListItemAvatar,
   Button,
-  ListItemSecondaryAction,
   makeStyles,
-  useMediaQuery,
   useTheme
 } from '@material-ui/core';
-import UserContext from "../contexts/UserContext";
 import {Paper , Container, Box } from '@mui/material';
 import { Add, Remove } from '@material-ui/icons';
-import Image from 'material-ui-image';
 import "./ShoppingCart.css";
-import { getCartItemsByUser } from '../api/cart';
+import { getCartItemsByUser,deleteItemFromCart } from '../api/cart';
 
 
 
 const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(2),
+    marginRight:"20px",
   },
-  gridContainer: {
-    [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-    },
-    [theme.breakpoints.up('md')]: {
-      flexDirection: 'row',
-    },
+ 
+  image: {
+    objectFit: 'contain',
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  gridItem: {
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
+
+  counterAndButton: {
+    [theme.breakpoints.up('sm')]: {
+      marginTop: 40,
     },
-    [theme.breakpoints.up('md')]: {
-      width: '50%',
+    [theme.breakpoints.up('xs')]: {
+      marginTop: 10,
     },
+    total: {
+    fontWeight: 700,
+  },
+
+
   },
 }));
 
 
-  function ShoppingCart({  onDelete, onCheckout }) {
+  function ShoppingCart() {
 
-  const {userId} = useContext(UserContext);
 
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [cartItems, setCartItems] = useState([]);
+  const [total, setTotal] = useState(0);
+
   
-   useEffect(() => {
-
-    const cartItemsFetch = async () => {
-
-      
+  const cartItemsFetch = async () => {
 
     const res = await getCartItemsByUser();
       setCartItems(() => {
         return [...res];
-      }); 
-    
+      });  
     }
 
+   useEffect(() => {
     cartItemsFetch();
   }, []);  
+  
 
-  const handleDelete = (itemId) => {
-  setCartItems(cartItems.filter(item => item.id !== itemId));
-  onDelete(itemId);
-  }
+//calcolo totale prezzo ad ogni rendering 
+  useEffect(() => {
+
+    const totalCalc = () => {
+      
+
+    var x = 0;
+    cartItems.map((item) => {
+    x = x + (item.itemId.price * item.itemQuantity);
+    });
+    setTotal(x);
+    }; 
+
+    totalCalc();
+
+  }, [cartItems]);    
+
+
+  //delete item
+  const handleDelete =  (itemId) => {
+    deleteItemFromCart({"itemId":itemId});
+    cartItemsFetch(); }
+
   
   const handleQuantityChange = (itemId, type) => {
   const updatedItems = cartItems.map(item => {
@@ -97,36 +117,39 @@ const useStyles = makeStyles((theme) => ({
     <Paper elevation={3} sx={{height:"100%", weight:"100%", mt:"10px",mx:"10px"}}>
   <ListItem key={item._id}>
   <Grid container className={classes.gridContainer}>
-  <Grid item xs={6} sm={7} md={3} className={classes.gridItem}>
-  <img src={item.itemId.imageUrl}  className="item-image" alt={item.name}/>
+  <Grid item xs={12} sm={6} md={3} className={classes.image}>
+  <img src={item.itemId.imageUrl[0]}  className="item-image" alt={item.name}/>
 </Grid>
-<Grid item xs={6} sm={5} md={9} className={classes.gridItem}>
-<Box sx={{display:"flex"}}>
+
+<Grid item xs={12} sm={6} md={5} className={classes.gridItem}>
 <ListItemText
 primary={item.itemId.name}
-secondary={item.itemId.brand}
+secondary={item.itemId.description}
 />
-<ListItemText
-primary=<p>Price: {item.itemId.price}$</p>
-secondary=<p>Quantity: {item.itemQuantity}</p>
+</Grid>
+<Grid item xs={2} sm={5} md={1} className={classes.gridItem}>
+<ListItemText style={{ ml:"4px" }}
+primary=<h3>{item.itemId.price}$</h3>
+secondary=<p>Num:{item.itemQuantity}</p>
 />
-</Box>
+</Grid>
 
-<ListItemSecondaryAction>
-<Box sx={{display:"flex", flexDirection:"column"}}>
+<Grid item xs={10} sm={7} md={3} className={classes.counterAndButton}>
+
 <Button onClick={() => handleQuantityChange(item.id, 'decrement')}>
 <Remove />
 </Button>
 <Button onClick={() => handleQuantityChange(item.id, 'increment')}>
 <Add />
 </Button>
-<Button onClick={() => handleDelete(item.id)}>
+<Button onClick={() => handleDelete(item.itemId._id)} variant="outlined" style={{ color:"#ff1744" }}>
 Delete
 </Button>
-</Box>
-</ListItemSecondaryAction>
+
 
 </Grid>
+
+
 </Grid>
 </ListItem>
 </Paper>
@@ -135,14 +158,18 @@ Delete
 
 </List>
 
+<Box style={{ display: 'flex', alignItems: 'center',  justifyContent: 'flex-end' }}>
 <Button
      variant="contained"
-     color="primary"
+     style={{ backgroundColor:"#0046be", color:"white", mr:10 }}
      className={classes.button}
-     onClick={onCheckout}
    >
 GO TO PAYMENT
 </Button>
+ <Typography className={classes.total} variant="h5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+       Total price: {total} $ 
+      </Typography>
+      </Box>
 </Container>
 )
 }
