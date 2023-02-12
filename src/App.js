@@ -7,14 +7,14 @@ import Registration from './pages/Registration';
 import  ShoppingCart  from './pages/ShoppingCart';
 import  ItemPage  from './pages/ItemPage';
 import NavBar from './components/NavBar';
-import {UserProvider} from "./contexts/UserContext"
+import {CartCountProvider} from "./contexts/CartCountContext";
 import { BrowserRouter } from "react-router-dom";
 
 
 function App() {
   return (
   <React.Fragment>
-  <UserProvider>
+  <CartCountProvider>
 <BrowserRouter>
   <NavBar/>
 <Routes>
@@ -27,7 +27,7 @@ function App() {
         <Route path="item/:itemId" element={<ItemPage/>}/>
         </Routes>
         </BrowserRouter>
-        </UserProvider>
+        </CartCountProvider>
         </React.Fragment>
         )
 };

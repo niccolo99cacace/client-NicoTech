@@ -1,4 +1,4 @@
-import React  from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,7 +10,9 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
-import {Box } from '@mui/material';
+import Badge from '@mui/material/Badge';
+import {CartCountContext} from '../contexts/CartCountContext';
+import { styled } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-
   logo: {
     flexGrow: 1,
     display: "none",
@@ -82,13 +83,22 @@ export default function NavBar() {
 
   const classes = useStyles();
 
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      right: 0,
+      top: 13,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 4px',
+      backgroundColor:"#ff9800",
+    },
+  }));
   
   const navigate = useNavigate();
   const onLogin = () =>  { navigate("/login"); }
 
   const onCart = () =>  { navigate("/Cart"); }
 
-  
+  const { cartCount } = useContext(CartCountContext);
 
   return (
     <div className={classes.root}>
@@ -113,9 +123,12 @@ export default function NavBar() {
           <IconButton color="inherit" onClick={onLogin}>
             <AccountCircle />
           </IconButton>
+
+          <StyledBadge badgeContent={cartCount} >
           <IconButton color="inherit" onClick={onCart} >
   <ShoppingCartIcon />
 </IconButton>
+</StyledBadge>
 
         </Toolbar>
       </AppBar>

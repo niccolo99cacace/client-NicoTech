@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -11,11 +10,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  divider:{
+    marginBottom: 40
+  }
 }));
 
 export default function LateralMenu() {
@@ -42,7 +45,7 @@ export default function LateralMenu() {
   };
 
   return (
-    
+    <React.Fragment>
       <List>
         <ListItem>
           <FormControl className={classes.formControl}>
@@ -106,6 +109,8 @@ renderValue={(selected) => selected.join(', ')}
        />
 </ListItem>
 </List>
+
+</React.Fragment>
 
 );
 }

@@ -65,6 +65,7 @@ const ImageCarousel = (props) => {
     <div className={classes.counter}>
         {currentIndex + 1}/{props.images.length}
       </div>
+      
       </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState , useEffect, useContext} from 'react';
 import Typography from "@material-ui/core/Typography";
 import {
   Grid,
@@ -13,7 +13,7 @@ import {Paper , Container, Box } from '@mui/material';
 import { Add, Remove } from '@material-ui/icons';
 import "./ShoppingCart.css";
 import { getCartItemsByUser,deleteItemFromCart } from '../api/cart';
-
+import { CartCountContext } from '../contexts/CartCountContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
   function ShoppingCart() {
 
+  const { cartCount, decToCart } = useContext(CartCountContext);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -90,7 +91,8 @@ const useStyles = makeStyles((theme) => ({
   //delete item
   const handleDelete =  (itemId) => {
     deleteItemFromCart({"itemId":itemId});
-    cartItemsFetch(); }
+    cartItemsFetch();
+    decToCart(); }
 
   
   const handleQuantityChange = (itemId, type) => {

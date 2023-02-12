@@ -12,8 +12,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Image from 'material-ui-image';
 import "./CardList.css";
 import LateralMenu from './LateralMenu';
-
-
+import Divider from '@mui/material/Divider';
+import { useNavigate } from "react-router-dom";
 
 
 const useStyles = makeStyles({
@@ -31,10 +31,7 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-  customButton: {
-    backgroundColor: '#f5f5f5',
-    color: 'black'
-  },
+
 });
 
 
@@ -58,11 +55,19 @@ function CardList() {
 
 
 
+  const navigate = useNavigate();
+
+  const handleViewProduct = (itemId) =>  { navigate("/item/"+ itemId); }
+
   return (
     <React.Fragment>
+
     <Grid container spacing={2} style={{ marginTop: '10px' }}>
   <Grid item xs={12} sm={3} md={3} lg={3}>
+  <div style={{ display: "flex", justifyContent: "space-between" }}>
     <LateralMenu />
+    <Divider orientation="vertical" flexItem style={{marginRight:40}}/>
+    </div>
   </Grid>
   <Grid item xs={12} sm={9} md={9} lg={9}>
     <Grid container spacing={2}>
@@ -91,7 +96,7 @@ function CardList() {
             </Typography>
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button className={classes.customButton} size="small" href={'/item/' + item._id} style={{ backgroundColor:"#0046be",color:"white"}}>
+            <Button className={classes.customButton} onClick={() => handleViewProduct(item._id)} size="small" style={{ backgroundColor:"#0046be",color:"white"}}>
             view product
         </Button>
         </Box>

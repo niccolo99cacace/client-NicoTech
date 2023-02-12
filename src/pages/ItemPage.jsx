@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +11,7 @@ import ImageCarousel from "../components/ImageCarousel";
 import {getItemById} from "../api/items";
 import Container from '@material-ui/core/Container';
 import {addItemToCart} from '../api/cart';
+import { CartCountContext } from '../contexts/CartCountContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,7 +79,7 @@ export default function ProductComponent() {
   availability: 1,
 imageUrl:["gg"]});
 
-
+const { cartCount, addToCart } = useContext(CartCountContext);
 
 
   const [expanded, setExpanded] = React.useState('reviews');
@@ -120,8 +121,8 @@ imageUrl:["gg"]});
 
 
     const handleAddCart = async (itemId,itemQuantity) => {
-      addItemToCart({"itemId":itemId, "itemQuantity":itemQuantity});
-      console.log({"itemId":itemId, "itemQuantity":itemQuantity});
+      const {double} = await addItemToCart({"itemId":itemId, "itemQuantity":itemQuantity});
+      if(double==false)       addToCart();
       };
 
   return (
