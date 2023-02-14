@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Image from 'material-ui-image';
-import "./CardList.css";
 import LateralMenu from './LateralMenu';
 import Divider from '@mui/material/Divider';
 import { useNavigate } from "react-router-dom";
@@ -19,18 +18,12 @@ import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
     minWidth: 220,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
+
   },
   pos: {
     marginBottom: 12,
   },
+
 
 });
 
@@ -46,6 +39,7 @@ function CardList() {
 
     const itemsFetch = async () => {
     const res = await getItems();
+    console.log(res);
     setItems(() => {
       return [...res];
     });   };
@@ -84,7 +78,7 @@ function CardList() {
             </Typography>
           
           
-            <Image className="fit-image" src={item.imageUrl[0]}  disableSpinner={true}  />
+            <Image className={classes.image} src={item.imageUrl[0]}  disableSpinner={true}  />
           
          
           <Box>

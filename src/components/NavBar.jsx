@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -13,6 +13,10 @@ import { Link } from 'react-router-dom';
 import Badge from '@mui/material/Badge';
 import {CartCountContext} from '../contexts/CartCountContext';
 import { styled } from '@mui/material/styles';
+import {authenticatedOrNot} from "../api/auth";
+import LoginIcon from '@mui/icons-material/Login';
+import AuthenticationContext from '../contexts/AuthenticationContext';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   logo: {
+    borderRadius: '25%',
     flexGrow: 1,
     display: "none",
     height: '50px',
@@ -100,6 +105,21 @@ export default function NavBar() {
 
   const { cartCount } = useContext(CartCountContext);
 
+  const { authentication, updateAuthentication } = useContext(AuthenticationContext);
+
+
+  //per gestire l'AuthenticationContext che determina se l'utente è loggato o no oppure se è dotato di token valido
+  useEffect(() => {
+
+    const authenticationControl = async () => {
+    const res = await authenticatedOrNot();
+    if(res==0) 
+      updateAuthentication(true);
+    }
+
+    authenticationControl();
+  }, []);
+
   return (
     <div className={classes.root}>
     
@@ -120,9 +140,15 @@ export default function NavBar() {
               }}
             />
           </div>
+          {authentication ? (
           <IconButton color="inherit" onClick={onLogin}>
             <AccountCircle />
           </IconButton>
+          ) : (
+          <IconButton color="inherit" onClick={onLogin}>
+            <LoginIcon />
+          </IconButton>
+          )}
 
           <StyledBadge badgeContent={cartCount} >
           <IconButton color="inherit" onClick={onCart} >

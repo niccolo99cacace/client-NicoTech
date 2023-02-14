@@ -35,8 +35,6 @@ export const signInUser = async (userInfo) => {
   };
 
 
-
-
   
   export const logout = async () => {
     try {
@@ -49,8 +47,6 @@ export const signInUser = async (userInfo) => {
       return { error: error.message || error };
     }
   };
-
-
 
 
 
@@ -71,4 +67,19 @@ catch (error) {
       return { error: error.message || error };
     }
   };
+
+
+    
+  export const authenticatedOrNot= async () => {
+    try {
+      const { data } = await client.get("/user/authenticatedOrNot");
+      return data;
+    } catch (error) {
+      const { response } = error;
+      if (response?.data) return response.data;
+  
+      return { error: error.message || error };
+    }
+  };
+
 

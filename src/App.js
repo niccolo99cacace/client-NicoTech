@@ -9,11 +9,13 @@ import  ItemPage  from './pages/ItemPage';
 import NavBar from './components/NavBar';
 import {CartCountProvider} from "./contexts/CartCountContext";
 import { BrowserRouter } from "react-router-dom";
+import {AuthenticationProvider} from "./contexts/AuthenticationContext";
 
 
 function App() {
   return (
   <React.Fragment>
+  <AuthenticationProvider>
   <CartCountProvider>
 <BrowserRouter>
   <NavBar/>
@@ -28,6 +30,7 @@ function App() {
         </Routes>
         </BrowserRouter>
         </CartCountProvider>
+        </AuthenticationProvider>
         </React.Fragment>
         )
 };

@@ -28,11 +28,11 @@ function Login() {
 
     const res = await signInUser(formData);
   
-if(res.hasOwnProperty("user") == true ){ console.log("ok");navigate("/", {
-  //replace:true non permette all'utente di tornare indietro(col tasto del browser) al login una volta acceduto
-  replace: true,
-});;}
-if(res.hasOwnProperty("error") == true ) {setError(res.error); console.log("nooooooooooooo");} 
+if(res.hasOwnProperty("user") == true )
+//rendirizzo l'utente alla home e la pagina (compresa NavBar) si ricarica
+window.location.replace("/");
+if(res.hasOwnProperty("error") == true ) 
+setError(res.error);
   
   };
 
@@ -79,7 +79,7 @@ if(res.hasOwnProperty("error") == true ) {setError(res.error); console.log("nooo
           flexDirection: "column", }}
           >
 <Typography variant="caption" >
-j.parker@meddoctor.org
+niccolo99cacace@gmail.com
       </Typography>
 <TextField
 name="email"
@@ -89,7 +89,7 @@ name="email"
         />
 
 <Typography variant="caption"> 
-DocJParker
+napoli4ever
       </Typography>
 <TextField
 name="password"
