@@ -12,9 +12,9 @@ import {
 import {Paper , Container, Box } from '@mui/material';
 import { Add, Remove } from '@material-ui/icons';
 import "./ShoppingCart.css";
-import { getCartItemsByUser,deleteItemFromCart } from '../api/cart';
+import { getCartItemsByUser,deleteItemFromCart,getCartItemsBySessionCart } from '../api/cart';
 import { CartCountContext } from '../contexts/CartCountContext';
-
+import AuthenticationContext from '../contexts/AuthenticationContext';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   function ShoppingCart() {
 
   const { cartCount, decToCart } = useContext(CartCountContext);
+  const { authentication } = useContext(AuthenticationContext);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -59,10 +60,20 @@ const useStyles = makeStyles((theme) => ({
   
   const cartItemsFetch = async () => {
 
-    const res = await getCartItemsByUser();
+    var res;
+
+      if(authentication == true){
+        res = await getCartItemsByUser();
+      }
+      else{
+        res = await getCartItemsBySessionCart();
+      }
+
+      if(res.length > 0){
       setCartItems(() => {
         return [...res];
       });  
+    }
     }
 
    useEffect(() => {
@@ -116,8 +127,8 @@ const useStyles = makeStyles((theme) => ({
   
   <List>
   {cartItems.map((item) => (
-    <Paper elevation={3} sx={{height:"100%", weight:"100%", mt:"10px",mx:"10px"}}>
-  <ListItem key={item._id}>
+    <Paper key={item.itemId._id} elevation={3} sx={{height:"100%", weight:"100%", mt:"10px",mx:"10px"}}>
+  <ListItem>
   <Grid container className={classes.gridContainer}>
   <Grid item xs={12} sm={6} md={3} className={classes.image}>
   <img src={item.itemId.imageUrl[0]}  className="item-image" alt={item.name}/>
@@ -131,8 +142,8 @@ secondary={item.itemId.description}
 </Grid>
 <Grid item xs={2} sm={5} md={1} className={classes.gridItem}>
 <ListItemText style={{ ml:"4px" }}
-primary=<h3>{item.itemId.price}$</h3>
-secondary=<p>Num:{item.itemQuantity}</p>
+primary={<span><h3>{item.itemId.price}$</h3></span>}
+secondary={<span>Num:{item.itemQuantity}</span>}
 />
 </Grid>
 

@@ -9,6 +9,16 @@ export const getCartItemsByUser = async () => {
     }
 };
 
+
+export const getCartItemsBySessionCart = async () => {
+    try {
+        const res = await client.get('/user/getCartItemsBySessionCart');
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 export const deleteItemFromCart = async (itemId) => {
     try {
         const res = await client.post('/user/removeItemById',itemId);
