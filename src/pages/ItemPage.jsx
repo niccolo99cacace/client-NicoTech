@@ -10,8 +10,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageCarousel from "../components/ImageCarousel";
 import {getItemById} from "../api/items";
 import Container from '@material-ui/core/Container';
-import {addItemToCart} from '../api/cart';
+import {addItemToCart, addItemSessionCart} from '../api/cart';
 import { CartCountContext } from '../contexts/CartCountContext';
+import  AuthenticationContext from '../contexts/AuthenticationContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +82,8 @@ imageUrl:["gg"]});
 
 const { cartCount, addToCart } = useContext(CartCountContext);
 
+const { authentication } = useContext(AuthenticationContext);
+
 
   const [expanded, setExpanded] = React.useState('reviews');
 
@@ -120,9 +123,19 @@ const { cartCount, addToCart } = useContext(CartCountContext);
     };
 
 
+
     const handleAddCart = async (itemId,itemQuantity) => {
-      const {double} = await addItemToCart({"itemId":itemId, "itemQuantity":itemQuantity});
-      if(double==false)       addToCart();
+      var double;
+
+      if(authentication == true){
+        double = await addItemToCart({"itemId":itemId, "itemQuantity":itemQuantity});
+      }
+      else{
+        double = await addItemSessionCart({"itemId":itemId, "itemQuantity":itemQuantity});
+      }
+       
+      if(double.double==false)       addToCart();
+
       };
 
   return (

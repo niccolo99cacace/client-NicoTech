@@ -2,7 +2,6 @@ import React, { useContext,useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
@@ -16,7 +15,7 @@ import { styled } from '@mui/material/styles';
 import {authenticatedOrNot} from "../api/auth";
 import LoginIcon from '@mui/icons-material/Login';
 import AuthenticationContext from '../contexts/AuthenticationContext';
-
+import {getCartItemsNumberByUserId,getSessionCartItemsNumber} from "../api/cart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,7 +102,7 @@ export default function NavBar() {
 
   const onCart = () =>  { navigate("/Cart"); }
 
-  const { cartCount } = useContext(CartCountContext);
+  const { cartCount, updateCartCount } = useContext(CartCountContext);
 
   const { authentication, updateAuthentication } = useContext(AuthenticationContext);
 
@@ -113,9 +112,21 @@ export default function NavBar() {
 
     const authenticationControl = async () => {
     const res = await authenticatedOrNot();
-    if(res==0) 
+    //se l'utente è autenticato
+    if(res==0) {
       updateAuthentication(true);
+      const count = await getCartItemsNumberByUserId();
+      console.log(count);
+      updateCartCount(count);
     }
+    //se invece l'utente non è autenticato
+    else{
+      const count = await getSessionCartItemsNumber();
+      console.log(count);
+      updateCartCount(count);
+      
+  }
+}
 
     authenticationControl();
   }, []);
