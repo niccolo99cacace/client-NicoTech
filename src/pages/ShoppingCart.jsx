@@ -12,7 +12,7 @@ import {
 import {Paper , Container, Box } from '@mui/material';
 import { Add, Remove } from '@material-ui/icons';
 import "./ShoppingCart.css";
-import { getCartItemsByUser,deleteItemFromCart,getCartItemsBySessionCart } from '../api/cart';
+import { getCartItemsByUser,deleteItemFromCart,getCartItemsBySessionCart,removeItemBySessionCart } from '../api/cart';
 import { CartCountContext } from '../contexts/CartCountContext';
 import AuthenticationContext from '../contexts/AuthenticationContext';
 
@@ -37,13 +37,14 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up('xs')]: {
       marginTop: 10,
-    },
+    },},
     total: {
     fontWeight: 700,
+    marginTop: 10,
   },
 
 
-  },
+  
 }));
 
 
@@ -60,16 +61,16 @@ const useStyles = makeStyles((theme) => ({
   
   const cartItemsFetch = async () => {
 
-    var res;
+    var res = [];
 
-      if(authentication == true){
-        res = await getCartItemsByUser();
-      }
-      else{
-        res = await getCartItemsBySessionCart();
-      }
+    if(authentication == true){
+      res = await getCartItemsByUser();
+    }
+    else{
+      res = await getCartItemsBySessionCart();
+    }
 
-      if(res.length > 0){
+      if(res.length > -1){
       setCartItems(() => {
         return [...res];
       });  
@@ -100,25 +101,45 @@ const useStyles = makeStyles((theme) => ({
 
 
   //delete item
-  const handleDelete =  (itemId) => {
-    deleteItemFromCart({"itemId":itemId});
-    cartItemsFetch();
-    decToCart(); }
+  const handleDelete =  async (itemId) => {
 
+    if(authentication == true){
+       await deleteItemFromCart({"itemId":itemId});
+    }
+    else{
+      await removeItemBySessionCart({"itemId":itemId});
+    }
+
+    decToCart();
+    cartItemsFetch(); }
+
+
+
+/*
   
-  const handleQuantityChange = (itemId, type) => {
+  const handleQuantityChange = async (itemId, type) => {
+
+    var res;
+
   const updatedItems = cartItems.map(item => {
-  if (item.id === itemId) {
-  if (type === 'increment' && item.quantity < 10) {
-  item.quantity += 1
-  } else if (type === 'decrement' && item.quantity > 1) {
-  item.quantity -= 1;
-  }
-  }
-  return item;
+  if (item.itemId._id === itemId) {
+  if (type === 'increment') {
+    if(authentication == true){
+      res = await incrementItemQuantity(itemId);
+    }}
+    if (type === 'decrement') {
+      if(authentication == false){
+        res = await incrementItemQuantitySessionCart(itemId);
+      }}
+    }
   });
-  setCartItems(updatedItems);
-  };
+  console.log(res); 
+  
+  };       
+  
+  da mettere come metodo dei bottoni
+  ************onClick={() => handleQuantityChange(item.itemId._id, 'increment')}
+  */
   
   return (
 
@@ -149,10 +170,10 @@ secondary={<span>Num:{item.itemQuantity}</span>}
 
 <Grid item xs={10} sm={7} md={3} className={classes.counterAndButton}>
 
-<Button onClick={() => handleQuantityChange(item.id, 'decrement')}>
+<Button >
 <Remove />
 </Button>
-<Button onClick={() => handleQuantityChange(item.id, 'increment')}>
+<Button >
 <Add />
 </Button>
 <Button onClick={() => handleDelete(item.itemId._id)} variant="outlined" style={{ color:"#ff1744" }}>
@@ -171,7 +192,7 @@ Delete
 
 </List>
 
-<Box style={{ display: 'flex', alignItems: 'center',  justifyContent: 'flex-end' }}>
+<Box style={{ display: 'flex', alignItems: 'center',  justifyContent: 'flex-end', mr:4 }}>
 <Button
      variant="contained"
      style={{ backgroundColor:"#0046be", color:"white", mr:10 }}

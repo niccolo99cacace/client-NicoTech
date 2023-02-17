@@ -21,14 +21,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  title: {
-    flexGrow: 1,
-    display: "none",
-    color: "white",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
-  },
+
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -100,6 +93,8 @@ export default function NavBar() {
   const navigate = useNavigate();
   const onLogin = () =>  { navigate("/login"); }
 
+  const onProfile = () =>  { navigate("/userProfile"); }
+
   const onCart = () =>  { navigate("/Cart"); }
 
   const { cartCount, updateCartCount } = useContext(CartCountContext);
@@ -152,7 +147,7 @@ export default function NavBar() {
             />
           </div>
           {authentication ? (
-          <IconButton color="inherit" onClick={onLogin}>
+          <IconButton color="inherit" onClick={onProfile}>
             <AccountCircle />
           </IconButton>
           ) : (

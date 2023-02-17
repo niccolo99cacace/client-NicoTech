@@ -5,6 +5,7 @@ import  Login from './pages/Login';
 import { Route, Routes } from "react-router-dom";
 import Registration from './pages/Registration';
 import  ShoppingCart  from './pages/ShoppingCart';
+import  UserProfile  from './pages/UserProfile';
 import  ItemPage  from './pages/ItemPage';
 import NavBar from './components/NavBar';
 import {CartCountProvider} from "./contexts/CartCountContext";
@@ -27,6 +28,7 @@ function App() {
         <Route path="/registration" element={<Registration/>}/>
         <Route path="/Cart" element={<ShoppingCart/>}/>
         <Route path="item/:itemId" element={<ItemPage/>}/>
+        <Route path="/userProfile" element={<UserProfile/>}/>
         </Routes>
         </BrowserRouter>
         </CartCountProvider>

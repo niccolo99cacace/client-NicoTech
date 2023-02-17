@@ -28,6 +28,16 @@ export const deleteItemFromCart = async (itemId) => {
     }
 };
 
+
+export const removeItemBySessionCart = async (itemId) => {
+    try {
+        const res = await client.post('/user/removeItemBySessionCart',itemId);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 export const addItemToCart = async (itemId,itemQuantity) => {
     try {
         const res = await client.post('/user/addItemById',itemId,itemQuantity);

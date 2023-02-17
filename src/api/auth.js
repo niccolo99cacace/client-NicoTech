@@ -83,3 +83,16 @@ catch (error) {
   };
 
 
+  export const getUserInformations= async () => {
+    try {
+      const { data } = await client.get("/user/getUserInformations");
+      return data;
+    } catch (error) {
+      const { response } = error;
+      if (response?.data) return response.data;
+  
+      return { error: error.message || error };
+    }
+  };
+
+
