@@ -96,3 +96,14 @@ catch (error) {
   };
 
 
+
+  export const sendResetPasswordMailAndToken = async (userId,email) => {
+    try {
+      const { data } = await client.post("/user/sendResetPasswordMailAndToken", userId,email);
+      return data;
+    } catch (error) {
+      const { response } = error;
+      if (response?.data) return response.data;
+      return { error: error.message || error };
+    }
+  };

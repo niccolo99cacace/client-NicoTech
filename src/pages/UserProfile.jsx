@@ -1,11 +1,15 @@
 import React, { useState,useEffect } from "react";
 import { Avatar, Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import { getUserInformations, logout } from '../api/auth';
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
 
     const [userInformations, setUserInformations] = useState({ name: "", email: "" });
 
+    const navigate = useNavigate();
+
+    const handleProfileManagement = () =>  { navigate("/userManagement"); }
 
     useEffect(() => {
 
@@ -28,12 +32,12 @@ const UserProfile = () => {
   return (
     <Container>
       <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" style={{marginTop:30}}>
-        <Avatar style={{ width: 150, height: 150, fontSize: 50, border: "2px solid black",backgroundColor:"green", color:"white" }}>U</Avatar>
+        <Avatar style={{ width: 150, height: 150, fontSize: 50, border: "2px solid black",backgroundColor:"green", color:"white" }}>{userInformations.name.charAt(0)}</Avatar>
         <Typography variant="h6" style={{marginTop:20}}>{userInformations.name}</Typography>
         <Typography variant="h6" style={{marginTop:20}}>{userInformations.email}</Typography>
         <Grid container justifyContent="center" spacing={5} style={{marginTop:30}}>
           <Grid item >
-            <Button variant="contained"  style={{ backgroundColor:"#0046be", color:"white"}} >profile management</Button>
+            <Button variant="contained" onClick={handleProfileManagement}  style={{ backgroundColor:"#0046be", color:"white"}} >profile management</Button>
           </Grid>
           <Grid item>
             <Button variant="outlined" style={{ backgroundColor:"white", color:"#0046be"}} >my purchases</Button>

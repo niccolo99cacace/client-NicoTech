@@ -11,6 +11,8 @@ import NavBar from './components/NavBar';
 import {CartCountProvider} from "./contexts/CartCountContext";
 import { BrowserRouter } from "react-router-dom";
 import {AuthenticationProvider} from "./contexts/AuthenticationContext";
+import  ProfileManagement  from './pages/ProfileManagement';
+import  ResetPassword  from './pages/ResetPassword.jsx';
 
 
 function App() {
@@ -29,6 +31,9 @@ function App() {
         <Route path="/Cart" element={<ShoppingCart/>}/>
         <Route path="item/:itemId" element={<ItemPage/>}/>
         <Route path="/userProfile" element={<UserProfile/>}/>
+        <Route path="/userManagement" element={<ProfileManagement/>}/>
+        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+
         </Routes>
         </BrowserRouter>
         </CartCountProvider>
