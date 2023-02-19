@@ -1,6 +1,6 @@
-import { signInUser } from "../api/auth";
+import { ConfirmResetPassword } from "../api/auth";
 import Button from "@mui/material/Button";
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
@@ -8,74 +8,72 @@ import {Paper , Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-
+import { useParams } from 'react-router-dom';
 
 function ResetPassword() {
 
-
+  const { token } = useParams();
 
 
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [newPassword, setNewPassword] = useState({newPassword: ""});
+  const [confirmNewPassword, setConfirmNewPassword] = useState({confirmNewPassword: null});
   const [error, setError] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
 
-
+  //inviamo la nuova password
   const handleSubmit  = async event => {
     //event.preventDefault(); serve per evitare che la pagina venga ricaricata quando si invia il form
     event.preventDefault();
 
-    const res = await signInUser(formData);
-  
-if(res.hasOwnProperty("user") == true )
-//rendirizzo l'utente alla home e la pagina (compresa NavBar) si ricarica
-window.location.replace("/");
+    const res = await ConfirmResetPassword({token:token, newPassword});
+
 if(res.hasOwnProperty("error") == true ) 
 setError(res.error);
   
   };
 
+
   //event permette di accedere ai campi del form
-  const handleChange = event => {
-    setFormData({
-      ...formData,
-      //quel .name sta per il campo name che sta tra i <TextField> 
-      //viene creato un campo con quel nome nell'oggetto se non c'è , se c'è già viene aggiornato 
-      //con il valore presente nel form 
+  const handleChangeNewPassword = event => {
+    setNewPassword({
+      ...newPassword,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const handleChangeConfirmNewPassword = event => {
+    setConfirmNewPassword({
+      ...confirmNewPassword,
       [event.target.name]: event.target.value
     });
   };
 
 
+  //controlliamo se le due password sono uguali , se lo sono abilitiamo il bottone
+  useEffect(() => {
+
+    const confirmAndPasswordEqual =  () => {
 
 
-
-
-    /*
-    useEffect(() => {
-
-        const authenticationControl = async () => {
-        const res = await authenticatedOrNot();
-        //se l'utente è autenticato
-        if(res==0) {
-          updateAuthentication(true);
-          const count = await getCartItemsNumberByUserId();
-          console.log(count);
-          updateCartCount(count);
-        }
-        //se invece l'utente non è autenticato
-        else{
-          const count = await getSessionCartItemsNumber();
-          console.log(count);
-          updateCartCount(count);
-          
-      }
+    if(newPassword.newPassword == confirmNewPassword.confirmNewPassword) {
+      setError("");
+      setIsButtonDisabled(false);
     }
     
-        authenticationControl();
-      }, []);
-    */
+    else{
+      setError("The two passwords are different");
+      setIsButtonDisabled(true);
+  }
+}
+
+    confirmAndPasswordEqual();
+  }, [confirmNewPassword]);
+
+
+
 
 
   return (
@@ -109,30 +107,29 @@ setError(res.error);
           flexDirection: "column", }}
           >
 <Typography variant="caption" >
-Password
+New password:
       </Typography>
 <TextField
-name="email"
-          label="email"
+name="newPassword"
+          label="new password"
+          type="password"
           variant="filled"
-          onChange={handleChange}
+          onChange={handleChangeNewPassword}
         />
 
 <Typography variant="caption"> 
-Repeat ResetPassword
+Repeat new password:
       </Typography>
 <TextField
-name="password"
-          label="password"
+name="confirmNewPassword"
+          label="confirm new password"
           type="password"
-          autoComplete="current-password"
           variant="filled"
-          onChange={handleChange}
+          onChange={handleChangeConfirmNewPassword}
         />
  {error && <FormHelperText error>{error}</FormHelperText>}
-<Button type="submit"  variant="contained" sx={{mr:"4"}} style={{ backgroundColor: "black" }}>confirm new password</Button> 
+<Button type="submit" disabled={isButtonDisabled} variant="contained" sx={{mr:"4"}} style={{ backgroundColor: "white" }}>confirm new password</Button> 
 
-<Button type="submit"  variant="contained" sx={{mr:"4"}} style={{ backgroundColor: "black" }}>aaaa</Button>
 </Paper>
 </FormControl>
     </form>

@@ -15,13 +15,21 @@ import  ProfileManagement  from './pages/ProfileManagement';
 import  ResetPassword  from './pages/ResetPassword.jsx';
 
 
+
 function App() {
+
+  //questo per evitare che la NavBar appaia quando mi trovo nella pagina per resettare la password
+  const pathname = window.location.pathname;
+  console.log(pathname.includes("/reset-password"));
+  const navBarOff = pathname.includes("/reset-password");
+
+  
   return (
   <React.Fragment>
   <AuthenticationProvider>
   <CartCountProvider>
 <BrowserRouter>
-  <NavBar/>
+{!navBarOff && <NavBar/> }
 <Routes>
         <Route path="/" element={<Home/>} />
         
@@ -38,6 +46,8 @@ function App() {
         </BrowserRouter>
         </CartCountProvider>
         </AuthenticationProvider>
+
+        
         </React.Fragment>
         )
 };

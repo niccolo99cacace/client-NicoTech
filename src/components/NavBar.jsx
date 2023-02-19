@@ -105,19 +105,18 @@ export default function NavBar() {
   //per gestire l'AuthenticationContext che determina se l'utente è loggato o no oppure se è dotato di token valido
   useEffect(() => {
 
+
     const authenticationControl = async () => {
     const res = await authenticatedOrNot();
     //se l'utente è autenticato
     if(res==0) {
       updateAuthentication(true);
       const count = await getCartItemsNumberByUserId();
-      console.log(count);
       updateCartCount(count);
     }
     //se invece l'utente non è autenticato
     else{
       const count = await getSessionCartItemsNumber();
-      console.log(count);
       updateCartCount(count);
       
   }
