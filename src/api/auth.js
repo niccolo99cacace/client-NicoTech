@@ -97,9 +97,9 @@ catch (error) {
 
 
 
-  export const sendResetPasswordMailAndToken = async (userId,email) => {
+  export const sendResetPasswordMailAndToken = async (email) => {
     try {
-      const { data } = await client.post("/user/sendResetPasswordMailAndToken", userId,email);
+      const { data } = await client.post("/user/sendResetPasswordMailAndToken", email);
       return data;
     } catch (error) {
       const { response } = error;

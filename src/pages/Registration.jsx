@@ -68,10 +68,10 @@ function Registration() {
                 flexDirection: "column",
               }}
             >
-              <Typography variant="caption">Name :</Typography>
+              <Typography variant="caption">Username :</Typography>
               <TextField
                 name="name"
-                label="name"
+                label="username"
                 variant="filled"
                 onChange={handleChange}
               />
@@ -98,7 +98,7 @@ function Registration() {
                 type="submit"
                 variant="contained"
                 sx={{ mr: "4" }}
-                style={{ backgroundColor: "black" }}
+                style={{ backgroundColor:"#0046be",color:"white"}}
               >
                 Sign up
               </Button>

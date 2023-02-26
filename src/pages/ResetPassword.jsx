@@ -17,10 +17,11 @@ function ResetPassword() {
 
   const navigate = useNavigate();
 
-  const [newPassword, setNewPassword] = useState({newPassword: ""});
+  const [newPassword, setNewPassword] = useState({newPassword: null});
   const [confirmNewPassword, setConfirmNewPassword] = useState({confirmNewPassword: null});
   const [error, setError] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [hideButton, setHideButton] = useState(false);
 
 
   //inviamo la nuova password
@@ -32,6 +33,11 @@ function ResetPassword() {
 
 if(res.hasOwnProperty("error") == true ) 
 setError(res.error);
+
+if(res.hasOwnProperty("ok") == true ) {
+setError(res.ok);
+setHideButton(true);
+}
   
   };
 
@@ -128,8 +134,9 @@ name="confirmNewPassword"
           onChange={handleChangeConfirmNewPassword}
         />
  {error && <FormHelperText error>{error}</FormHelperText>}
-<Button type="submit" disabled={isButtonDisabled} variant="contained" sx={{mr:"4"}} style={{ backgroundColor: "white" }}>confirm new password</Button> 
-
+ {!hideButton &&
+<Button type="submit" disabled={isButtonDisabled} variant="contained" sx={{mr:"4"}}  style={{ backgroundColor:"#0046be",color:"white"}}>confirm new password</Button> 
+ }
 </Paper>
 </FormControl>
     </form>

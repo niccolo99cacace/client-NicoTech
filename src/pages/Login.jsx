@@ -8,6 +8,7 @@ import {Paper , Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+import { sendResetPasswordMailAndToken } from '../api/auth';
 
 
 function Login() {
@@ -19,8 +20,14 @@ function Login() {
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
+  const [errorSendEmailResetPassword, setErrorSendEmailResetPassword] = useState(null);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [resetPasswordTextField, setResetPasswordTextField] = useState("");
 
 
+
+  const viewSendEmailTextField = () =>  {setForgotPassword(true);
+ }
 
   const handleSubmit  = async event => {
     //event.preventDefault(); serve per evitare che la pagina venga ricaricata quando si invia il form
@@ -47,6 +54,25 @@ setError(res.error);
     });
   };
 
+  //per aggiornare il TextField dell'email per il reset della password 
+  const handleChangeResetPassword = event => {
+    setResetPasswordTextField(event.target.value);
+  };
+
+
+  //per mandare l'email di reset password
+  const handleResetPassword =  async (email) => {
+
+    const res = await sendResetPasswordMailAndToken({"email":email});
+
+    //message è il messaggio di errore inviato dal server 
+    //ok nel caso il messaggio sia positivo
+    if(res.hasOwnProperty("message") == true )
+    setErrorSendEmailResetPassword(res.message);
+    if(res.hasOwnProperty("ok") == true ) 
+    setErrorSendEmailResetPassword(res.ok);
+  }
+
 
   return (
     <React.Fragment>
@@ -58,11 +84,11 @@ setError(res.error);
      sx={{ 
       display: "inline-flex",
       flexDirection: "column",
-      justifyContent: "center",
+      
       alignItems: "center",
     height: "100vh",
     width:"100%",
-
+marginTop:"40px",
     }}
           >
 
@@ -79,7 +105,7 @@ setError(res.error);
           flexDirection: "column", }}
           >
 <Typography variant="caption" >
-niccolo99cacace@gmail.com
+Email: 
       </Typography>
 <TextField
 name="email"
@@ -89,7 +115,7 @@ name="email"
         />
 
 <Typography variant="caption"> 
-napoli4ever
+Password:
       </Typography>
 <TextField
 name="password"
@@ -100,12 +126,33 @@ name="password"
           onChange={handleChange}
         />
  {error && <FormHelperText error>{error}</FormHelperText>}
-<Button type="submit"  variant="contained" sx={{mr:"4"}} style={{ backgroundColor: "black" }}>Login</Button> 
+<Button type="submit"  variant="contained"  style={{ backgroundColor:"#0046be",color:"white"}}>Login</Button> 
 </Paper>
 </FormControl>
     </form>
 
 <Link to="/registration" style={{marginTop: '20px'}} >I’m not registered yet</Link>
+
+{!forgotPassword ? (
+<Button type="submit"  variant="contained" style={{  backgroundColor:"white", color:"#0046be",marginTop: '25px'}} onClick={viewSendEmailTextField}>Forgot password</Button>
+) : (
+  <React.Fragment>
+  <Button type="submit"  variant="contained" style={{  backgroundColor:"white", color:"#0046be",marginTop: '25px'}}
+  onClick={() => handleResetPassword(resetPasswordTextField)}>Send Email</Button>
+  <Typography variant="caption" style={{marginTop: '15px', marginLeft:'9px'}} >
+We will send you a message to reset your password.
+Please write youre email. 
+      </Typography>
+<TextField
+          label="email"
+          variant="filled"
+          onChange={handleChangeResetPassword}
+        />
+
+ {errorSendEmailResetPassword && <FormHelperText error>{errorSendEmailResetPassword}</FormHelperText>}
+        </React.Fragment>
+  )}
+
 </Box>
 
 </React.Fragment>
