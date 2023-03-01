@@ -3,9 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import {Accordion, AccordionSummary, AccordionDetails} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageCarousel from "../components/ImageCarousel";
 import {getItemById} from "../api/items";
@@ -15,6 +13,13 @@ import { CartCountContext } from '../contexts/CartCountContext';
 import  AuthenticationContext from '../contexts/AuthenticationContext';
 
 const useStyles = makeStyles((theme) => ({
+  addCartButton: {
+    backgroundColor: '#ff9800',
+    color: 'white',
+    marginTop:'15px',
+    marginBottom:'15px',
+    marginLeft:'20px',
+  },
   root: {
     flexGrow: 1,
     marginTop:'25px',
@@ -28,17 +33,6 @@ const useStyles = makeStyles((theme) => ({
   panels: {
     marginTop:'25px',
   },
-  addToCartButton: {
-    backgroundColor: '#ff9800',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#ffc107',
-    },
-    marginTop:'15px',
-    marginBottom:'15px',
-    marginLeft:'20px',
-  },
-
   counter: {
     display: 'flex',
     alignItems: 'center',
@@ -161,7 +155,7 @@ const { authentication } = useContext(AuthenticationContext);
     <Button className={classes.button} onClick={() => handleIncrement(item.availability)}>+</Button>
     </div>
 
-<Button className={classes.addToCartButton} onClick={() => handleAddCart(item._id,count)}>Add to Cart</Button>
+<Button className={classes.addCartButton} onClick={() => handleAddCart(item._id,count)}>Add to Cart</Button>
 
 <Typography variant="body1">Description : {item.description}</Typography>
 </div>
@@ -172,50 +166,50 @@ const { authentication } = useContext(AuthenticationContext);
 
 
 <div className={classes.panels}>
-<ExpansionPanel expanded={expanded === 'reviews'} onChange={handleExpand('reviews')}>
-<ExpansionPanelSummary
+<Accordion expanded={expanded === 'reviews'} onChange={handleExpand('reviews')}>
+<AccordionSummary
 expandIcon={<ExpandMoreIcon />}
 aria-controls="reviews-content"
 id="reviews-header"
 >
 <Typography>Reviews</Typography>
-</ExpansionPanelSummary>
-<ExpansionPanelDetails>
+</AccordionSummary>
+<AccordionDetails>
 <Typography>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
 probare, quae sunt a te dicta? Refert tamen, quo modo.
 </Typography>
-</ExpansionPanelDetails>
-</ExpansionPanel>
-<ExpansionPanel expanded={expanded === 'similar'} onChange={handleExpand('similar')}>
-<ExpansionPanelSummary
+</AccordionDetails>
+</Accordion>
+<Accordion expanded={expanded === 'similar'} onChange={handleExpand('similar')}>
+<AccordionSummary
 expandIcon={<ExpandMoreIcon />}
 aria-controls="similar-content"
 id="similar-header"
 >
 <Typography>Similar Products</Typography>
-</ExpansionPanelSummary>
-<ExpansionPanelDetails>
+</AccordionSummary>
+<AccordionDetails>
 <Typography>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
 probare, quae sunt a te dicta? Refert tamen, quo modo.
 </Typography>
-</ExpansionPanelDetails>
-</ExpansionPanel>
-<ExpansionPanel expanded={expanded === 'info'} onChange={handleExpand('info')}>
-<ExpansionPanelSummary
+</AccordionDetails>
+</Accordion>
+<Accordion expanded={expanded === 'info'} onChange={handleExpand('info')}>
+<AccordionSummary
 expandIcon={<ExpandMoreIcon />}
 aria-controls="info-content"
 id="info-header"
 >
 <Typography>More Information</Typography>
-</ExpansionPanelSummary>
-<ExpansionPanelDetails>
+</AccordionSummary>
+<AccordionDetails>
 <Typography>
 {item.largeDescription}
 </Typography>
-</ExpansionPanelDetails>
-</ExpansionPanel>
+</AccordionDetails>
+</Accordion>
 </div>
 </div>
 </Container>

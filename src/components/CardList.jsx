@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext,useState, useEffect } from 'react';
 import {getItems} from "../api/items";
 import {
   Grid,
@@ -13,6 +13,7 @@ import Image from 'material-ui-image';
 import LateralMenu from './LateralMenu';
 import Divider from '@mui/material/Divider';
 import { useNavigate } from "react-router-dom";
+import {HomeItemsContext} from '../contexts/HomeItemsContext';
 
 
 const useStyles = makeStyles({
@@ -29,18 +30,19 @@ const useStyles = makeStyles({
 
 
 function CardList() {
+
+  const { homeItems, updateHomeItems } = useContext(HomeItemsContext);
   
 
   const classes = useStyles();
 
-  const [itemss, setItems] = useState([]);
 
   useEffect(() => {
 
     const itemsFetch = async () => {
     const res = await getItems();
     console.log(res);
-    setItems(() => {
+    updateHomeItems(() => {
       return [...res];
     });   };
 
@@ -65,7 +67,7 @@ function CardList() {
   </Grid>
   <Grid item xs={12} sm={9} md={9} lg={9}>
     <Grid container spacing={2}>
-      {itemss.map((item) => (
+      {homeItems.map((item) => (
         <Grid item xs={12} sm={6} md={3} lg={3} key={item._id}>
           <Card className={classes.root}>
       <CardContent>
@@ -90,7 +92,7 @@ function CardList() {
             </Typography>
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button className={classes.customButton} onClick={() => handleViewProduct(item._id)} size="small" style={{ backgroundColor:"#0046be",color:"white"}}>
+            <Button className={classes.customButton} onClick={() => handleViewProduct(item._id)} size="small" sx={{ mr: "4" }} style={{ backgroundColor:"#0046be",color:"white"}}>
             view product
         </Button>
         </Box>

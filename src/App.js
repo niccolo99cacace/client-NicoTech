@@ -11,6 +11,7 @@ import NavBar from './components/NavBar';
 import {CartCountProvider} from "./contexts/CartCountContext";
 import { BrowserRouter } from "react-router-dom";
 import {AuthenticationProvider} from "./contexts/AuthenticationContext";
+import { HomeItemsProvider } from "./contexts/HomeItemsContext";
 import  ProfileManagement  from './pages/ProfileManagement';
 import  ResetPassword  from './pages/ResetPassword.jsx';
 
@@ -26,6 +27,7 @@ function App() {
   
   return (
   <React.Fragment>
+  <HomeItemsProvider>
   <AuthenticationProvider>
   <CartCountProvider>
 <BrowserRouter>
@@ -46,7 +48,7 @@ function App() {
         </BrowserRouter>
         </CartCountProvider>
         </AuthenticationProvider>
-
+        </HomeItemsProvider>
         
         </React.Fragment>
         )

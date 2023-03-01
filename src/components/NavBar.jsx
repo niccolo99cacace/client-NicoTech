@@ -1,4 +1,4 @@
-import React, { useContext,useEffect } from "react";
+import React, { useContext,useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,6 +16,10 @@ import {authenticatedOrNot} from "../api/auth";
 import LoginIcon from '@mui/icons-material/Login';
 import AuthenticationContext from '../contexts/AuthenticationContext';
 import {getCartItemsNumberByUserId,getSessionCartItemsNumber} from "../api/cart";
+import Button from "@mui/material/Button";
+import {getSearchResults,getSuggestions} from "../api/items";
+import {HomeItemsContext} from '../contexts/HomeItemsContext';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    border: '2px solid white',
+
+
   },
   inputRoot: {
     color: "white",
@@ -77,6 +84,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
 
+  const { homeItems, updateHomeItems } = useContext(HomeItemsContext);
+
+  const [query, setQuery] = useState('');
 
   const classes = useStyles();
 
@@ -125,6 +135,44 @@ export default function NavBar() {
     authenticationControl();
   }, []);
 
+
+
+//gestione Search 
+  const handleSearch = async (event) => {
+    //chiamando "event.preventDefault()" viene annullata l'azione predefinita del form 
+    //di ricerca (che sarebbe di inviare una richiesta HTTP) ,quindi invece viene inviata 
+    //una richiesta AJAX al backend API utilizzando la libreria "axios".
+    event.preventDefault();
+    try{
+      const completeQuery = {query:query};
+      const results = await getSearchResults(completeQuery);
+      updateHomeItems(() => {
+        return [...results];
+      });
+    } catch (err) {
+        console.log(err);
+    }
+  };
+
+
+  //aggiornamento asincrono degli item della home in base alla stringa contenuta nella barra di ricerca
+  const handleInputChange = async (event) => {
+// aggiornamento asincrono del campo di ricerca
+setQuery(event.target.value);
+try{
+  //dato che il setQuery non è immediato mi prendo direttamente dalla barra di ricerca il contenuto 
+  //da cercare per la ricerca asincrona , cosi lo metto in un oggetto con proprietà query
+const completeQuery = {query:event.target.value};
+const results = await getSuggestions(completeQuery);
+updateHomeItems(() => {
+return [...results];
+});
+} catch (error) {
+console.log(error);
+}
+};
+ 
+
   return (
     <div className={classes.root}>
     
@@ -134,16 +182,22 @@ export default function NavBar() {
       <img src="https://res.cloudinary.com/deze9bms8/image/upload/v1675944061/NicoTechBlu_nlgepy.png" alt="Logo" className={classes.logo} />
     </Link>
           <div className={classes.search}>
+            
+            <IconButton color="inherit" onClick={handleSearch} >
             <div className={classes.searchIcon}>
               <SearchIcon />
-            </div>
+              </div>
+              </IconButton>
+            
             <InputBase
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
+              onChange={handleInputChange}
             />
+             
           </div>
           {authentication ? (
           <IconButton color="inherit" onClick={onProfile}>
@@ -166,55 +220,3 @@ export default function NavBar() {
     </div>
   );
 }
-
-
-
-
-
-/*  import { AppBar, Toolbar, Typography, IconButton, InputBase, Grid } from "@material-ui/core";
-import { Search,  ShoppingCart} from "@mui/icons-material";
-import LoginIcon from '@mui/icons-material/Login';
-import "./NavBar.css";
-import { useNavigate } from "react-router-dom";
-
-const NavBar = () => {
-
-  const navigate = useNavigate();
-
-
-  const onLogin = () =>  { navigate("/login"); }
-
-  return (
-    <AppBar position="static" color="default">
-      <Toolbar>
-        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-          <Grid item xs={4}>
-          <InputBase className={"small-input"} placeholder="Search" />
-          </Grid>
-          <Grid item xs={1}>
-            <IconButton>
-              <Search />
-            </IconButton>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography variant="h6" noWrap>
-              NicoStyle
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton  onClick={onLogin}>
-              <LoginIcon/>
-            </IconButton>
-            <IconButton>
-              <ShoppingCart />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </Toolbar>
-    </AppBar>
-  );
-};
-
-export default NavBar;
-
-*/
