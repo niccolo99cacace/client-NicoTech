@@ -36,3 +36,13 @@ export const getSuggestions = async (itemName) => {
         console.log(err);
     }
 };
+
+
+export const getFilteredItems = async (filters) => {
+    try {
+        const res = await client.post('/item/getFilteredItems',filters);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
