@@ -11,15 +11,10 @@ import Container from '@material-ui/core/Container';
 import {addItemToCart, addItemSessionCart} from '../api/cart';
 import { CartCountContext } from '../contexts/CartCountContext';
 import  AuthenticationContext from '../contexts/AuthenticationContext';
+import Review from "../components/Review";
 
 const useStyles = makeStyles((theme) => ({
-  addCartButton: {
-    backgroundColor: '#ff9800',
-    color: 'white',
-    marginTop:'15px',
-    marginBottom:'15px',
-    marginLeft:'20px',
-  },
+
   root: {
     flexGrow: 1,
     marginTop:'25px',
@@ -30,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
   productDetails: {
     textAlign: 'left',
   },
-  panels: {
-    marginTop:'25px',
-  },
+
   counter: {
     display: 'flex',
     alignItems: 'center',
@@ -77,14 +70,6 @@ imageUrl:["gg"]});
 const { cartCount, addToCart } = useContext(CartCountContext);
 
 const { authentication } = useContext(AuthenticationContext);
-
-
-  const [expanded, setExpanded] = React.useState('reviews');
-
-
-  const handleExpand = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
 
 //per caricare le informazioni dello specifico item 
   useEffect(() => {
@@ -142,10 +127,10 @@ const { authentication } = useContext(AuthenticationContext);
         <Grid item xs={12} sm={6}>
           
             <div className={classes.productDetails}>
-              <Typography variant="h5">{item.name} </Typography>
-              <Typography variant="subtitle1">{item.brand}</Typography>
+              <Typography variant="h4">{item.name} </Typography>
+              <Typography variant="h6">{item.brand}</Typography>
               
-              <Typography variant="subtitle1">Price : {item.price} $</Typography>
+              <Typography variant="h6">Price : {item.price} $</Typography>
 <Typography variant="subtitle1">Availability : {item.availability}</Typography>
 
 
@@ -155,62 +140,39 @@ const { authentication } = useContext(AuthenticationContext);
     <Button className={classes.button} onClick={() => handleIncrement(item.availability)}>+</Button>
     </div>
 
-<Button className={classes.addCartButton} onClick={() => handleAddCart(item._id,count)}>Add to Cart</Button>
+<Button className={classes.addCartButton} 
+style={{    backgroundColor: '#ff9800',
+    color: 'white',
+    marginTop:'15px',
+    marginBottom:'15px',
+    marginLeft:'20px'}} onClick={() => handleAddCart(item._id,count)}>Add to Cart</Button>
 
-<Typography variant="body1">Description : {item.description}</Typography>
+<Typography variant="body1" style={{marginTop:"7px"}}>{item.description}</Typography>
 </div>
-
-
 </Grid>
 </Grid>
 
+<Typography variant="h6" style={{marginTop:"30px"}}>Description:</Typography>
 
-<div className={classes.panels}>
-<Accordion expanded={expanded === 'reviews'} onChange={handleExpand('reviews')}>
-<AccordionSummary
-expandIcon={<ExpandMoreIcon />}
-aria-controls="reviews-content"
-id="reviews-header"
->
-<Typography>Reviews</Typography>
-</AccordionSummary>
-<AccordionDetails>
-<Typography>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-probare, quae sunt a te dicta? Refert tamen, quo modo.
-</Typography>
-</AccordionDetails>
-</Accordion>
-<Accordion expanded={expanded === 'similar'} onChange={handleExpand('similar')}>
-<AccordionSummary
-expandIcon={<ExpandMoreIcon />}
-aria-controls="similar-content"
-id="similar-header"
->
-<Typography>Similar Products</Typography>
-</AccordionSummary>
-<AccordionDetails>
-<Typography>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-probare, quae sunt a te dicta? Refert tamen, quo modo.
-</Typography>
-</AccordionDetails>
-</Accordion>
-<Accordion expanded={expanded === 'info'} onChange={handleExpand('info')}>
-<AccordionSummary
-expandIcon={<ExpandMoreIcon />}
-aria-controls="info-content"
-id="info-header"
->
-<Typography>More Information</Typography>
-</AccordionSummary>
-<AccordionDetails>
-<Typography>
-{item.largeDescription}
-</Typography>
-</AccordionDetails>
-</Accordion>
-</div>
+<Typography variant="body1" style={{whiteSpace: 'pre-wrap'}}>{item.largeDescription}</Typography>
+
+<Typography variant="h6" style={{marginTop:"30px"}}>Reviews:</Typography>
+
+<Typography variant="h6" style={{marginTop:"30px"}}>Similar products:</Typography>
+
+<Review
+  username="Mario Rossi"
+  date="20/02/2023"
+  rating={4}
+  description="Prodotto di ottima qualità!nggnfgffggz
+  nfnfnfgngnngngd
+  dgnndgzdgnzzzzzzzzzzzzzzzzzzzzz zzzzzzzzzzzzzzzzzzzzzzzz fijnf bnof fnus fsisv diondsdsvno vsndnksvn visd 
+   zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+  ndgzzzzzzzz"
+  imageUrl="https://picsum.photos/200/200"
+/>
+
+
 </div>
 </Container>
 );

@@ -17,6 +17,7 @@ import  ResetPassword  from './pages/ResetPassword.jsx';
 
 
 
+
 function App() {
 
   //questo per evitare che la NavBar appaia quando mi trovo nella pagina per resettare la password
@@ -43,6 +44,7 @@ function App() {
         <Route path="/userProfile" element={<UserProfile/>}/>
         <Route path="/userManagement" element={<ProfileManagement/>}/>
         <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+
 
         </Routes>
         </BrowserRouter>
