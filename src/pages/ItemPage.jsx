@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import {Accordion, AccordionSummary, AccordionDetails} from '@material-ui/core';
+import {Box} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageCarousel from "../components/ImageCarousel";
-import {getItemById} from "../api/items";
+import {getItemById,getReviewsByItem} from "../api/items";
 import Container from '@material-ui/core/Container';
 import {addItemToCart, addItemSessionCart} from '../api/cart';
 import { CartCountContext } from '../contexts/CartCountContext';
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductComponent() {
   const classes = useStyles();
-  const [item,setItem] = React.useState({name: "",
+  const [item,setItem] = useState({name: "",
   brand: "",
   description: "",
   largeDescription: "",
@@ -67,6 +67,8 @@ export default function ProductComponent() {
   availability: 1,
 imageUrl:["gg"]});
 
+const [reviews, setReviews] = useState([]);
+
 const { cartCount, addToCart } = useContext(CartCountContext);
 
 const { authentication } = useContext(AuthenticationContext);
@@ -74,16 +76,22 @@ const { authentication } = useContext(AuthenticationContext);
 //per caricare le informazioni dello specifico item 
   useEffect(() => {
 
-    const itemResearch = async () => {
     const path = window.location.pathname;
     const pathArray = path.split("/");
     const lastPath = pathArray[pathArray.length - 1];
-    console.log(lastPath);
+
+
+    const itemResearch = async () => {
     const res = await getItemById({_id:lastPath}); 
-    console.log(res);
     setItem(res);   };
 
+
+    const reviewsResearch = async () => {
+      const res = await getReviewsByItem({itemId:lastPath}); 
+      setReviews(res);   };
+
     itemResearch();
+    reviewsResearch();
   }, []);
 
 
@@ -154,25 +162,29 @@ style={{    backgroundColor: '#ff9800',
 
 <Typography variant="h6" style={{marginTop:"30px"}}>Description:</Typography>
 
-<Typography variant="body1" style={{whiteSpace: 'pre-wrap'}}>{item.largeDescription}</Typography>
+<Typography variant="body1" style={{whiteSpace: 'pre-wrap',marginTop:"30px"}} >{item.largeDescription}</Typography>
 
-<Typography variant="h6" style={{marginTop:"30px"}}>Reviews:</Typography>
+<Typography variant="h6" style={{marginTop:"30px",marginBottom:"30px"}}>Reviews:</Typography>
+
+{reviews.map((review) => (
+
+<Review 
+  username={review.reviewId.username}
+  date={review.reviewId.date.substring(0, 10)}
+  rating={review.reviewId.rating}
+  description={review.reviewId.description}
+  imageUrl={review.reviewId.username.charAt(0)}
+/>
+))}
+
+
+{authentication &&
+  <Box style={{ display: 'flex', justifyContent: 'flex-end' }}>
+ <Button style={{ backgroundColor:"#0046be",color:"white", marginTop:"50px"}}>ADD REVIEW</Button>
+ </Box>
+}
 
 <Typography variant="h6" style={{marginTop:"30px"}}>Similar products:</Typography>
-
-<Review
-  username="Mario Rossi"
-  date="20/02/2023"
-  rating={4}
-  description="Prodotto di ottima qualità!nggnfgffggz
-  nfnfnfgngnngngd
-  dgnndgzdgnzzzzzzzzzzzzzzzzzzzzz zzzzzzzzzzzzzzzzzzzzzzzz fijnf bnof fnus fsisv diondsdsvno vsndnksvn visd 
-   zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-  ndgzzzzzzzz"
-  imageUrl="https://picsum.photos/200/200"
-/>
-
-
 </div>
 </Container>
 );

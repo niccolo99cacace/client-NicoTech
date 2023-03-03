@@ -46,3 +46,13 @@ export const getFilteredItems = async (filters) => {
         console.log(err);
     }
 };
+
+
+export const getReviewsByItem = async (itemId) => {
+    try {
+        const res = await client.post('/item/getReviewsByItem',itemId);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
