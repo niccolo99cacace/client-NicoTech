@@ -75,3 +75,13 @@ export const getSessionCartItemsNumber = async () => {
         console.log(err);
     }
 };
+
+
+export const clearCart = async () => {
+    try {
+        const res = await client.get('/user/clearCart');
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};

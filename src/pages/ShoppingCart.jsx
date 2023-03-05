@@ -7,12 +7,12 @@ import {
   ListItemText,
   Button,
   makeStyles,
-  useTheme
+  useTheme,Dialog, DialogTitle, DialogContent, DialogActions
 } from '@material-ui/core';
 import {Paper , Container, Box } from '@mui/material';
 import { Add, Remove } from '@material-ui/icons';
 import "./ShoppingCart.css";
-import { getCartItemsByUser,deleteItemFromCart,getCartItemsBySessionCart,removeItemBySessionCart } from '../api/cart';
+import { getCartItemsByUser,deleteItemFromCart,getCartItemsBySessionCart,removeItemBySessionCart,clearCart } from '../api/cart';
 import { CartCountContext } from '../contexts/CartCountContext';
 import AuthenticationContext from '../contexts/AuthenticationContext';
 
@@ -49,6 +49,19 @@ const useStyles = makeStyles((theme) => ({
 
 
   function ShoppingCart() {
+
+    const [open, setOpen] = useState(false);
+
+  const handleAlertOpen = async () => {
+    await clearCart();
+    setOpen(true);
+
+  };
+
+    const handleContinueClick = () => {
+    // Effettua il reindirizzamento a un'altra pagina
+    window.location.replace("/");
+  };
 
   const { cartCount, decToCart } = useContext(CartCountContext);
   const { authentication } = useContext(AuthenticationContext);
@@ -193,16 +206,34 @@ Delete
 </List>
 
 <Box style={{ display: 'flex', alignItems: 'center',  justifyContent: 'flex-end', mr:4 }}>
+{authentication ? (
 <Button
      variant="contained"
      style={{ backgroundColor:"#0046be", color:"white", mr:10 }}
      className={classes.button}
+     onClick={handleAlertOpen}
    >
 GO TO PAYMENT
 </Button>
+) : (
+  <Typography variant="h6" style={{ color:"red" }}>
+   If you want to buy, you need to login or eventually to create an account first </Typography>
+)}
  <Typography className={classes.total} variant="h5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
        Total price: {total} $ 
       </Typography>
+
+       <Dialog open={open} >
+        <DialogTitle>Notice</DialogTitle>
+        <DialogContent>
+          <p>Your purchase has been successful.</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleContinueClick} color="primary" autoFocus>
+            CONTINUE
+          </Button>
+        </DialogActions>
+      </Dialog>
       </Box>
 </Container>
 )
