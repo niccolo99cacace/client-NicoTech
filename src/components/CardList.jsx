@@ -1,5 +1,5 @@
 import React, { useContext,useState, useEffect } from 'react';
-import {getItems} from "../api/items";
+import {getItems,deleteItemById} from "../api/items";
 import {
   Grid,
   Card,
@@ -14,7 +14,11 @@ import LateralMenu from './LateralMenu';
 import Divider from '@mui/material/Divider';
 import { useNavigate } from "react-router-dom";
 import {HomeItemsContext} from '../contexts/HomeItemsContext';
-
+import AdminOrNotContext from '../contexts/AdminOrNotContext';
+import {getAdminOrNot} from "../api/auth";
+import ClearIcon from '@mui/icons-material/Clear';
+import IconButton from "@material-ui/core/IconButton";
+import {Dialog, DialogTitle, DialogContent, DialogActions} from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
@@ -31,8 +35,28 @@ const useStyles = makeStyles({
 
 function CardList() {
 
+  //per l'avviso quando l'admin vuole eliminare un item
+  const [open, setOpen] = useState(false);
+
+  const handleAlertOpen = async () => {
+    setOpen(true);
+  };
+
+  const handleCancelClick = () => {
+    setOpen(false);
+  };
+
+  const handleConfirmClick = async (itemId) => {
+    const res = await deleteItemById({itemId:itemId});
+    // Effettua il ricaricamento della home
+    window.location.replace("/");
+  };
+
+
+
+
   const { homeItems, updateHomeItems } = useContext(HomeItemsContext);
-  
+  const {adminOrNot, updateAdminOrNot} = useContext(AdminOrNotContext);
 
   const classes = useStyles();
 
@@ -40,15 +64,14 @@ function CardList() {
   useEffect(() => {
 
     const itemsFetch = async () => {
+      
     const res = await getItems();
-    console.log(res);
     updateHomeItems(() => {
       return [...res];
     });   };
 
     itemsFetch();
   }, []);
-
 
 
   const navigate = useNavigate();
@@ -66,12 +89,39 @@ function CardList() {
     </div>
   </Grid>
   <Grid item xs={12} sm={9} md={9} lg={9}>
+
+  {adminOrNot &&
+  <Button style={{marginBottom:"20px", backgroundColor:"green",color:"white"}}>Add product</Button>
+  }
+
+
     <Grid container spacing={2}>
       {homeItems.map((item) => (
         <Grid item xs={12} sm={6} md={3} lg={3} key={item._id}>
           <Card className={classes.root}>
       <CardContent>
-        
+      {adminOrNot &&
+        <Box style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <IconButton color="inherit" onClick={handleAlertOpen} >
+      <ClearIcon style={{color:"red"}}></ClearIcon>
+      </IconButton>
+      
+      <Dialog open={open} >
+        <DialogTitle>Notice</DialogTitle>
+        <DialogContent>
+          <p>The product {item.name} ({item.brand}) will be deleted</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleConfirmClick(item._id)} color="primary" autoFocus>
+            CONFIRM
+          </Button>
+          <Button onClick={handleCancelClick} color="primary" autoFocus>
+            CANCEL
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </Box>
+      }
             <Typography variant="h5" component="h2">
               {item.name}
             </Typography>

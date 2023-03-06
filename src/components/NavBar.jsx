@@ -19,6 +19,8 @@ import {getCartItemsNumberByUserId,getSessionCartItemsNumber} from "../api/cart"
 import Button from "@mui/material/Button";
 import {getSearchResults,getSuggestions} from "../api/items";
 import {HomeItemsContext} from '../contexts/HomeItemsContext';
+import AdminOrNotContext from '../contexts/AdminOrNotContext';
+import {getAdminOrNot} from "../api/auth";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +86,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
 
+  const {adminOrNot, updateAdminOrNot} = useContext(AdminOrNotContext);
+
   const { homeItems, updateHomeItems } = useContext(HomeItemsContext);
 
   const [query, setQuery] = useState('');
@@ -117,6 +121,7 @@ export default function NavBar() {
 
 
     const authenticationControl = async () => {
+
     const res = await authenticatedOrNot();
     //se l'utente è autenticato
     if(res==0) {
@@ -128,8 +133,11 @@ export default function NavBar() {
     else{
       const count = await getSessionCartItemsNumber();
       updateCartCount(count);
-      
   }
+//per controllare se l'utente è admin 
+  const admin = await getAdminOrNot();
+  if(admin == true)
+  updateAdminOrNot(true);
 }
 
     authenticationControl();

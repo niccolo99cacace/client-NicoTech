@@ -110,8 +110,19 @@ catch (error) {
 
   export const ConfirmResetPassword  = async (tokenAndNewPassord) => {
     try {
-    console.log(tokenAndNewPassord);
       const { data } = await client.post("/user/ConfirmResetPassword",tokenAndNewPassord);
+      return data;
+    } catch (error) {
+      const { response } = error;
+      if (response?.data) return response.data;
+      return { error: error.message || error };
+    }
+  };
+
+
+  export const getAdminOrNot  = async () => {
+    try {
+      const { data } = await client.get("/user/adminOrNot");
       return data;
     } catch (error) {
       const { response } = error;

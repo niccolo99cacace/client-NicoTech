@@ -3,15 +3,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import {Box} from '@material-ui/core';
+import {Box, TextField} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageCarousel from "../components/ImageCarousel";
-import {getItemById,getReviewsByItem} from "../api/items";
+import {getItemById,getReviewsByItem,updateItemPrice,updateItemAvailability} from "../api/items";
 import Container from '@material-ui/core/Container';
 import {addItemToCart, addItemSessionCart} from '../api/cart';
 import { CartCountContext } from '../contexts/CartCountContext';
 import  AuthenticationContext from '../contexts/AuthenticationContext';
 import Review from "../components/Review";
+import AdminOrNotContext from '../contexts/AdminOrNotContext';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -56,9 +57,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProductComponent() {
+export default function ItemPage() {
+
   const classes = useStyles();
-  const [item,setItem] = useState({name: "",
+  const [item,setItem] = useState({
+  _id:undefined,  
+  name: "",
   brand: "",
   description: "",
   largeDescription: "",
@@ -72,6 +76,35 @@ const [reviews, setReviews] = useState([]);
 const { cartCount, addToCart } = useContext(CartCountContext);
 
 const { authentication } = useContext(AuthenticationContext);
+
+
+
+
+const {adminOrNot, updateAdminOrNot} = useContext(AdminOrNotContext);
+//il nuovo prezzo e disponibilità inseriti dall'admin
+const [newPrice, setNewPrice] = useState("");
+const [newAvailability, setNewAvailability] = useState("");
+
+//questo 2 change sono per gestire i TextField
+const handleNewPriceChange = (event) => {
+  setNewPrice(event.target.value);
+};
+
+const handleNewAvailabilityChange = (event) => {
+  setNewAvailability(event.target.value);
+};
+
+//questi due metodi sono per inviare la richiesta di modifica rispettivamente i prezzo e disponibilità
+const handleNewPriceUpdate = async () => {
+  const res = await updateItemPrice({newPrice:newPrice,itemId:item._id});
+
+};
+
+const handleNewAvailabilityUpdate = async () => {
+  const res = await updateItemAvailability({newAvailability:newAvailability,itemId:item._id});
+};
+
+
 
 //per caricare le informazioni dello specifico item 
   useEffect(() => {
@@ -127,6 +160,51 @@ const { authentication } = useContext(AuthenticationContext);
 
   return (
     <Container>
+
+
+<Grid   container
+        spacing={2}
+        style={{ marginTop: 30, alignItems: "center" }}>
+        <Grid item xs={12} sm={4} md={4}>
+          <TextField
+            label="new price"
+            onChange={handleNewPriceChange}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4} md={4}>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "#0046be", color: "white" }}
+            onClick={handleNewPriceUpdate}
+          >
+            modify price
+          </Button>
+        </Grid>
+      </Grid>
+
+      <Grid   container
+        spacing={2}
+        style={{ marginTop: 30,marginBottom:"20px", alignItems: "center" }}>
+        <Grid item xs={12} sm={4} md={4}>
+          <TextField
+            label="new availability"
+            onChange={handleNewAvailabilityChange}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4} md={4}>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "#0046be", color: "white" }}
+            onClick={handleNewAvailabilityUpdate}
+          >
+            modify availability
+          </Button>
+        </Grid>
+      </Grid>
+
+
+
+
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={12} sm={6}>

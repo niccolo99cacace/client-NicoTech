@@ -56,3 +56,32 @@ export const getReviewsByItem = async (itemId) => {
         console.log(err);
     }
 };
+
+export const deleteItemById = async (itemId) => {
+    try {
+        const res = await client.post('/item/deleteItemById',itemId);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+
+export const updateItemPrice = async (itemIdAndNewPrice) => {
+    try {
+        const res = await client.post('/item/updateItemPrice',itemIdAndNewPrice);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+
+export const updateItemAvailability = async (itemIdAndNewAvailability) => {
+    try {
+        const res = await client.post('/item/updateItemAvailability',itemIdAndNewAvailability);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
