@@ -15,7 +15,8 @@ import { HomeItemsProvider } from "./contexts/HomeItemsContext";
 import  ProfileManagement  from './pages/ProfileManagement';
 import  ResetPassword  from './pages/ResetPassword.jsx';
 import { AdminOrNotProvider } from "./contexts/AdminOrNotContext";
-
+import AddItem from "./pages/admin/AddItem";
+import  ImagesOnCloud   from './pages/admin/ImagesOnCloud.jsx';
 
 
 function App() {
@@ -44,7 +45,10 @@ function App() {
         <Route path="/userProfile" element={<UserProfile/>}/>
         <Route path="/userManagement" element={<ProfileManagement/>}/>
         <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+        <Route path="/AddItem" element={<AddItem/>}/>
 
+
+        <Route path="/Cloud" element={<ImagesOnCloud />}/>
 
         </Routes>
         </BrowserRouter>

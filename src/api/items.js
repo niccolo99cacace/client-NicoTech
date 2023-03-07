@@ -85,3 +85,35 @@ export const updateItemAvailability = async (itemIdAndNewAvailability) => {
         console.log(err);
     }
 };
+
+
+
+export const uploadImage1OnCloud = async (formData) => {
+    try {
+
+        const res = await client.post('/item/uploadImage1OnCloud',formData);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const uploadImage2OnCloud = async (formData) => {
+    try {
+
+        const res = await client.post('/item/uploadImage2OnCloud',formData);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const uploadImage3OnCloud = async (formData) => {
+    try {
+
+        const res = await client.post('/item/uploadImage3OnCloud',formData);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};

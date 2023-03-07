@@ -162,6 +162,8 @@ const handleNewAvailabilityUpdate = async () => {
     <Container>
 
 
+{adminOrNot &&
+<React.Fragment>
 <Grid   container
         spacing={2}
         style={{ marginTop: 30, alignItems: "center" }}>
@@ -201,6 +203,8 @@ const handleNewAvailabilityUpdate = async () => {
           </Button>
         </Grid>
       </Grid>
+      </React.Fragment>
+}
 
 
 
