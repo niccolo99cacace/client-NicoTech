@@ -78,6 +78,8 @@ function CardList() {
 
   const handleViewProduct = (itemId) =>  { navigate("/item/"+ itemId); }
 
+  const handlePageAddProduct = () =>  { navigate("/admin/AddItem"); }
+
   return (
     <React.Fragment>
 
@@ -91,7 +93,8 @@ function CardList() {
   <Grid item xs={12} sm={9} md={9} lg={9}>
 
   {adminOrNot &&
-  <Button style={{marginBottom:"20px", backgroundColor:"green",color:"white"}}>Add product</Button>
+  <Button style={{marginBottom:"20px", backgroundColor:"green",color:"white"}} 
+  onClick={handlePageAddProduct} >Add product</Button>
   }
 
 
@@ -147,7 +150,7 @@ function CardList() {
         </Button>
         </Box>
           
-      
+        
       </CardContent>
     </Card>
 </Grid>

@@ -1,13 +1,34 @@
 import React, { useState } from 'react';
 import { TextField, Button, Select, MenuItem, InputLabel, FormControl,Container } from '@material-ui/core';
+import {uploadImage1OnCloud,uploadImage2OnCloud,uploadImage3OnCloud,createItem} from "../../api/items";
+
 
 const AddItem = () => {
+  
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+
+
+  const handleImage1Change = (event) => {
+    setImage1(event.target.files[0]);
+  };
+
+  const handleImage2Change = (event) => {
+    setImage2(event.target.files[0]);
+  };
+
+  const handleImage3Change = (event) => {
+    setImage3(event.target.files[0]);
+  };
+
+
+
   const [name, setName] = useState('');
   const [brand, setBrand] = useState('');
   const [productType, setProductType] = useState('');
   const [availability, setAvailability] = useState(0);
   const [price, setPrice] = useState(0);
-  const [images, setImages] = useState([]);
   const [shortDescription, setShortDescription] = useState('');
   const [longDescription, setLongDescription] = useState('');
 
@@ -31,10 +52,6 @@ const AddItem = () => {
     setPrice(event.target.value);
   };
 
-  const handleImage1Change = (event) => {
-    setImages(event.target.files);
-  };
-
   const handleShortDescriptionChange = (event) => {
     setShortDescription(event.target.value);
   };
@@ -43,9 +60,21 @@ const AddItem = () => {
     setLongDescription(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // qui puoi fare l'invio del form tramite una chiamata HTTP
+    //prima carico le immagini su cloud
+    const formData1 = new FormData();
+    const formData2 = new FormData();
+    const formData3 = new FormData();
+    formData1.append('image1', image1);
+    formData2.append('image2', image2);
+    formData3.append('image3', image3);
+    const url1 = await uploadImage1OnCloud(formData1);
+    const url2 = await uploadImage2OnCloud(formData2);
+    const url3 = await uploadImage3OnCloud(formData3);
+  
+    await createItem({name:name, brand:brand, category:productType, price:price, description:shortDescription,
+      availability:availability, imageUrl:[url1,url2,url3], largeDescription:longDescription})
   };
 
   return (
@@ -74,9 +103,9 @@ const AddItem = () => {
           value={productType}
           onChange={handleProductTypeChange}
         >
-          <MenuItem value="type1">Tipo 1</MenuItem>
-          <MenuItem value="type2">Tipo 2</MenuItem>
-          <MenuItem value="type3">Tipo 3</MenuItem>
+          <MenuItem value="Portable PC">Portable PC</MenuItem>
+          <MenuItem value="Smartphone">Smartphone</MenuItem>
+          <MenuItem value="Monitor">Monitor</MenuItem>
         </Select>
       </FormControl>
       <TextField
@@ -97,7 +126,8 @@ const AddItem = () => {
         style={{marginLeft:"40px"}}
         margin="normal"
       />
-      <TextField
+
+<TextField
         label="Image1"
         type="file"
         onChange={handleImage1Change}
@@ -114,7 +144,7 @@ const AddItem = () => {
       <TextField
         label="Image2"
         type="file"
-        onChange={handleImage1Change}
+        onChange={handleImage2Change}
         required
         style={{marginLeft:"40px"}}
         margin="normal"
@@ -128,7 +158,7 @@ const AddItem = () => {
       <TextField
         label="Image3"
         type="file"
-        onChange={handleImage1Change}
+        onChange={handleImage3Change}
         required
         style={{marginLeft:"40px"}}
         margin="normal"
@@ -139,6 +169,7 @@ const AddItem = () => {
           accept: 'image/*',
         }}
       />
+
       <TextField
         label="Descrizione breve"
         value={shortDescription}

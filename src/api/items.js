@@ -117,3 +117,14 @@ export const uploadImage3OnCloud = async (formData) => {
         console.log(err);
     }
 };
+
+
+export const createItem = async (item) => {
+    try {
+
+        const res = await client.post('/item/createItem',item);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
