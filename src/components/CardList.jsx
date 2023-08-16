@@ -20,17 +20,16 @@ import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from "@material-ui/core/IconButton";
 import {Dialog, DialogTitle, DialogContent, DialogActions} from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 220,
-
+    width: '100%',  // Aggiungi questa linea per rendere la larghezza delle card dinamica
+    marginBottom: '15px'  // Aggiungi un po' di margine tra le card per una migliore visualizzazione
   },
   pos: {
     marginBottom: 12,
   },
 
-
-});
+}));
 
 
 function CardList() {
@@ -98,9 +97,9 @@ function CardList() {
   }
 
 
-    <Grid container spacing={2}>
+    <Grid container spacing={3}>
       {homeItems.map((item) => (
-        <Grid item xs={12} sm={6} md={3} lg={3} key={item._id}>
+        <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
           <Card className={classes.root}>
       <CardContent>
       {adminOrNot &&
@@ -125,6 +124,10 @@ function CardList() {
       </Dialog>
       </Box>
       }
+
+
+
+
             <Typography variant="h5" component="h2">
               {item.name}
             </Typography>
@@ -133,7 +136,7 @@ function CardList() {
             </Typography>
           
           
-            <Image className={classes.image} src={item.imageUrl[0]}  disableSpinner={true}  />
+            <Image className={classes.image} src={item.imageUrl[0]}  disableSpinner={false}  />
           
          
           <Box>

@@ -181,7 +181,7 @@ export default function LateralMenu() {
       </List>
 
       <Button type="submit"  variant="contained" size="small" onClick={handleFilters}
-      style={{  backgroundColor:"white", color:"#0046be",marginTop: '25px',marginLeft:'35px'}}
+      style={{  backgroundColor:"white", color:"#0046be",marginTop: '25px',marginLeft:'35px',marginRight:'20px'}}
   >Apply filters</Button>
   </Box>
     </React.Fragment>

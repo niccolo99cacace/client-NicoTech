@@ -29,17 +29,20 @@ const useStyles = makeStyles((theme) => ({
   },
 
   search: {
-    position: "relative",
+    
     borderRadius: theme.shape.borderRadius,
     marginLeft: 0,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: 50,
     },
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: 0,
+    },
 
   },
   searchIcon: {
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(0,2),
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -47,7 +50,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     border: '2px solid white',
-
+    width: "100%",
+    
+    [theme.breakpoints.down("xs")]: {
+      padding:4,
+      marginLeft: 5,
+    },
 
   },
   inputRoot: {
@@ -59,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     color: "white",
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("xs")]: {
       width: "12ch",
       "&:focus": {
         width: "20ch",
@@ -192,9 +200,9 @@ console.log(error);
           <div className={classes.search}>
             
             <IconButton color="inherit" onClick={handleSearch} >
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-              </div>
+            
+              <SearchIcon className={classes.searchIcon}/>
+              
               </IconButton>
             
             <InputBase
